@@ -1,0 +1,579 @@
+<!DOCTYPE HTML>
+<HTMl>
+<HEAD>
+
+	<TITLE>My Toy Models</TITLE>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<link rel="apple-touch-icon" href="images/icon_300.png"/>
+
+	<meta property="og:site_name" content="The LIT Lab"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:title" content="Suffolk Sims"/>
+	<meta property="og:description" content="\"You are standing in a courtroom...\" Develop your practice skills and test your mettle in these emersive text-based simulations from Suffolk University Law School's Legal Innovation & Technology Lab. Choose a simulation from the list below, or open a file above. Content Warning: These simulations explore the US criminal justice system. They are intended for a mature audiance and may include depictions of desturbing behavior—including drug use, sexual violence, and racism. User discretion is advised."/>
+	<meta property="og:image" content="images/thefuture.png"/>
+
+	<link rel="stylesheet" type="text/css" href="css/main.css?v=2023-05-10.13:09">
+
+	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script>
+		if ((window.location.protocol == "https:") | (window.location.protocol == "http:")) {
+		  var server = "https://tools.suffolklitlab.org"; // Production Server
+		} else {
+		  var server = "http://127.0.0.1:10012"; // Local Testing Server
+		}
+	</script>
+
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script id="MathJax-script" async
+			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+
+	<script src="js/spin.min.js"></script>
+	<script src="js/interactions.js?v=2023-05-10.13:09"></script>
+	<script>
+		questions = [{'question': 'Will X happen?','training':{'observations':0}},
+		
+		{'question': 'will it rain tomorrow?',
+ 'type': 'categorical',
+ 'features': [{'name': 'temperature',
+   'type': 'continuous',
+   'units': 'Fahrenheit',
+   'lower': 0,
+   'upper': 100,
+   'mean': 68.5},
+  {'name': 'humidity',
+   'type': 'continuous',
+   'units': 'percentage',
+   'lower': 0,
+   'upper': 100,
+   'mean': 70.0},
+  {'name': 'wind speed',
+   'type': 'continuous',
+   'units': 'miles per hour',
+   'lower': 0,
+   'upper': 100,
+   'mean': 7.5},
+  {'name': 'precipitation',
+   'type': 'categorical',
+   'categories': ['yes', 'no'],
+   'weights': [0.5, 0.5]}],
+ 'target': {'possible_answers': ['Yes', 'No']},
+ 'training': {'headers': ['recorded_at',
+   'temperature',
+   'humidity',
+   'wind_speed',
+   'precipitation-yes',
+   'precipitation-no',
+   'target','note'],
+  'observations': [['2023-07-16 21:17', 72.25, 64.57, 8.48, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 70.07, 65.62, 4.53, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 67.72, 70.66, 6.18, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 63.17, 71.98, 8.35, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 71.81, 66.64, 12.49, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 66.63, 71.09, 2.98, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 69.66, 68.33, 7.39, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 67.18, 70.4, 9.14, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 72.83, 70.62, 9.17, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 69.01, 69.01, 6.31, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 70.86, 63.17, 8.3, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 74.4, 68.98, 6.06, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 69.1, 73.16, 7.27, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 66.53, 68.66, 7.14, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 64.61, 71.43, 7.68, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 71.25, 75.97, 6.68, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 70.81, 78.03, 4.64, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 65.08, 68.95, 10.07, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 68.17, 73.26, 8.3, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 67.38, 69.97, 6.21, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 68.23, 68.52, 4.77, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 67.45, 70.58, 11.52, 1.0, 0.0, 'yes',''],
+   ['2023-07-16 21:17', 64.93, 71.95, 6.68, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 71.62, 73.73, 5.0, 0.0, 1.0, 'no',''],
+   ['2023-07-16 21:17', 62.95, 69.15, 6.46, 1.0, 0.0, 'yes','']]},
+ 'coefficients': {'temperature': 0.2367782355450912,
+  'humidity': -0.12389795668046169,
+  'wind_speed': -0.892371546574006,
+  'precipitation-yes': 18.607187389456104,
+  'precipitation-no': -18.58496977322286,
+  'intercept': 0.0},
+  'performance': {"r-squared":0.2}}]
+
+	localStorage.questions = JSON.stringify(questions)
+
+	</script>
+	
+	<!--
+	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/abbott.min.css"></link>-->
+
+
+</HEAD>
+
+<BODY BGCOLOR="#ffffff" BACKGROUND="" MARGINWIDTH="0" MARGINHEIGHT="0">
+<div id="menu_bar" class="menu_bar">
+  <a href="javascript:void('');" onClick="show_list();">Models</a>
+  <input id="upload" type="file"/> 
+  &nbsp;&nbsp;<a href="javascript:void('');" onClick="load_state(1);make_new();">New</a>
+  &nbsp;&nbsp;<a id="load_mod" href="javascript:void('');" id="upload_link">Load</a>
+  &nbsp;&nbsp;<a id="down_mod" href="javascript:void('');" onClick="save_sim();">Download</a>
+  <div style="float:right">
+	<a id="run_mod" href="javascript:void('');" onClick="run_model();">Run</a>
+	<a id="edit_mod" href="javascript:void('');" onClick="edit();">Edit</a>
+  </div>
+</div>
+
+<div id="about" class="about">
+	<p>
+	If you’ve ever wanted to “run a study” on some aspect of your personal life, this site is for you. It lets you "science the heck" out of your pet hypotheses—building simple predictive models (<a href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank">regressions</a>) around your data. All the number crunching runs in your browser. So your data stays on your device (unless you activly download and share it, which I tried to make easy).  
+	</p>
+	<img src="images/colarusso.jpg" style="border-radius: 50%;float:left;width:50px;margin:0 15px 5px 0;"/>
+	<p>
+	I <a href="https://www.codingthelaw.org" target="_blank">teach law students</a> about data, machine learning, and “AI.” I made this tool so they could get a feel for <i>narrow AI</i> (machine learning) by building their own. As Richard Feynman observed, “that which I cannot create, I do not understand.” That being said, I don’t expect my students to become statisticians or data scientists. Rather, I want them to learn enough to understand the realm of the possible and call BS when needed. To that end, this site lets you create your own <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank">toy models</a>, intentional simplifications that help folks explore the dynamics of a situation. That being said, keep in mind the tools provided here embody that dangerous mix of power and ease of use. Please consult a statistics text before assuming you know what they are telling you. ;)
+	</p>
+	<p>I haven't embedded analytics or tracking here, and all your data stays on your device/ My hope is this will free you to experiment honestly. But it means I don't know if folks are even using this tool unless they tell me. So, I'd apprechiate you telling what you're up to. You can find me <a href="" target="_blank">@Colarusso@mastodon.social</a> or use <a href="" target="_blank">this feedback form</a>. Want to look at the code? Check out <a href="" target="_blank">this GitHub repo</a>.</p>
+
+	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
+	<div class="button_container">
+		<a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a>
+	</div>
+</div>
+
+<div id="list_screen"><div id="list"></div></div>
+
+<div id="new_model_screen" class="new_model_screen">
+	<div id="new_model" class="new_model">
+		<div class="l_img_embed" style="max-width:400px;">
+			<img src="images/boxquote.png" alt="'All models are wrong, but some are useful.' - George Box" width="100%"/>
+			<div class="caption">Maps are models, and they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
+		</div>
+		<p>
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
+		</p>
+		<p>Go ahead, create a model.</p>
+		<div class="button_container">
+			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
+			<a href="javascript:void('')" onClick="make_new();" class="button">From a File</a>
+		</div>
+	</div>
+</div>
+
+<div id="run">
+	<div id="prediction" class="prediction">
+		<h1 id="question_text">Loading...</h1>
+		<h2 id="prediction_text">--</h2>
+		<p>
+			Based on <a href="javascript:void('');" onClick="alert('download csv')"><span id="n_entires"><i>n</i></span> observations</a>
+		</p>
+	</div>
+	<div id="features_wrapper">  
+		<div id="features">
+			<h2>Inputs/Features</h2>
+			<div class="feature">
+				<b>1) temperature:</b>	<span id="temperature">50</span> (<span id="temperature_units">Fahrenheit</span>)
+				<p><input type="range" min="1" max="100" value="50" class="slider" id="myRange" class="slider" oninput="$('#temperature').html(this.value);run_model();"></p>
+			</div>
+
+			<div class="feature">
+				<b>2) humidity:</b>	<span id="humidity">50</span> (<span id="humidity_units">percentage</span>)
+				<p><input type="range" min="1" max="100" value="50" class="slider" id="myRange" class="slider" oninput="$('#humidity').html(this.value);run_model();"></p>
+			</div>
+
+			<div class="feature">
+				<b>3) wind speed:</b>	<span id="wind_speed">50</span> (<span id="wind_speed_units">miles per hour</span>)
+				<p><input type="range" min="1" max="100" value="50" class="slider" id="myRange" class="slider" oninput="$('#wind_speed').html(this.value);run_model();"></p>
+			</div>
+
+			<div class="feature">
+				<b>4) precipitation:</b>	
+				<p>
+					<select id="precipitation" class="select" oninput="run_model();">
+						<option>Yes</option>
+						<option>No</option>
+					<select>
+				</p>
+			</div>
+
+			<!-- Check for change to notes and features and make sure folks know when they will be lost-->
+			<p><b>NOTE (optional):</b></p>
+			<p>
+				<textarea id="note" style="width:100%;height:70px"></textarea></p>
+			<p>
+				<a href="" class="button" style="margin-bottom: 20px;">Log Ground Truth</a>
+			</p>
+			<p>
+				<sup>&dagger;</sup>
+				Here's the regression behind this prediction:
+
+				<div id="regression" class="regression">
+		\[p(x) = {{1} \over {1 + e^{-1(B_0 + x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1)}}}\]
+				</div>
+
+				Where:
+				<ul>
+					<li>\(p(x)\) is the probability the answer is <i>Yes</i></li> 
+					<li>\(B_0\) is the <i>intercept</i></li> 
+					<li>\(x_1\) is <i>temperature</i> in <i>Farenheight</i></li> 
+					<li>\(B_1\) is a coefficient with value = -2.909078</li> 
+				</ul>
+
+				<p>Curent Model Performance:<sup>*</sup></p>
+				<ul>
+					<li><a href="" target="_blank">R-squared</a> = 0.5</li>
+					<li><a href="" target="_blank">accuracey</a> = 0.5</li>
+				</ul>
+				<sup>*</sup>Arrived at using k-folds 
+			</p>
+		</div>
+	</div>
+</div>
+
+
+<div id="edit_screen" class="edit_screen">
+	<div id="edit" class="edit">
+		<p>
+			You can experiemnt with edits to your model below or read <a href="" target="_blank">the documentation</a>.<sup>&dagger;</sup>
+		</p>
+
+		<textarea id="model_json" style="width:100%;height:55vh;"></textarea>
+
+		<div id="wrap_box" style="display: block;">
+		<label>
+			<input type="checkbox" id="wrap" name="wrap" value="1" onchange="toggle_wrap('');"> word wrap</label> 
+		</div>
+		<div class="button_container">
+			<a href="javascript:void('')" onClick="save_changes();" class="button">Save Changes</a>
+			<a href="javascript:void('')" onClick="make_new();" class="button">Save &amp; Train</a>
+			<a href="javascript:void('')" onClick="delete_mod();" class="button" style="background:#c61c1c">Delete</a>
+		</div>
+		<div style="float:left;width:100%;margin:5px 0 60px 0;">
+		<sup>&dagger;</sup> FWIW, the documenation discusses how to add advanced features like interaction terms.
+		</div>
+	</div>
+</div>
+
+
+<div id="footer" class="footer">
+	<a id="about" href="javascript:void('');" onClick="show_about();">About</a> | 
+	<a id="tos" href="terms">Terms</a> | 
+	<a id="feedback" href="https://forms.gle/" target="_blank">Feedback</a>
+	<span style="float: right;"><a id="mode" href="javascript:void('')" onClick="dark_mode(1)" style="text-decoration: none;">🌗</a></span>
+</div>
+
+</BODY>
+
+<script type="text/javascript">
+
+function rethinkWindowSize() {
+	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px');
+	$('#features_wrapper').scrollTop(0);
+}
+
+window.onresize = rethinkWindowSize;
+
+function dark_mode(change=null){
+
+	if (localStorage.dark_mode) {
+		m = localStorage.dark_mode
+	} else {
+		m = 0;
+		localStorage.dark_mode = m;
+	}
+
+	if (change) {
+		m = 1-m;
+	}
+
+	if(m==1){
+		$('body').css("background","black"); 
+		$('body').css("color","white");
+		$("#menu_bar").attr('class', 'menu_bar_dark');
+		$("#list").attr('class', 'list_dark');
+		$("div[class='list_item']").attr('class', 'list_item_dark');
+		$("#prediction").attr('class', 'prediction_dark');
+		$("#footer").attr('class', 'footer_dark');
+		$('#mode').html("💡"); 
+		$("input,textarea,select,.regression").css('opacity', 0.75) 
+		localStorage.dark_mode = 1;
+	} else {
+		$('body').css("background","white"); 
+		$('body').css("color","black"); 
+		$("#menu_bar").attr('class', 'menu_bar');
+		$("#list").attr('class', 'list');
+		$("div[class='list_item_dark']").attr('class', 'list_item');
+		$("#prediction").attr('class', 'prediction');
+		$("#footer").attr('class', 'footer');
+		$('#mode').html("🌗"); 
+		$("input,textarea,select,.regression").css('opacity', 1) 
+		localStorage.dark_mode = 0;
+	}
+}
+
+function show_about(){
+	$('#about').show();
+	$('#list_screen').hide();
+	$('#new_model_screen').hide();
+	$('#run').hide();
+	$('#edit_screen').hide();
+	localStorage.screen = "about";
+	$('#load_mod').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').hide();
+}
+
+function show_list() {
+	$('#about').hide();
+	$('#list_screen').show();
+	$('#new_model_screen').hide();
+	$('#run').hide();
+	$('#edit_screen').hide();
+	localStorage.screen = "list";
+	$('#load_mod').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').hide();
+}
+
+function make_new() {
+	$('#about').hide();
+	$('#list_screen').hide();
+	$('#new_model_screen').show();
+	$('#run').hide();
+	$('#edit_screen').hide();
+	localStorage.screen = "new";
+	$('#load_mod').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').hide();
+}
+
+function run_model(){
+	$('#about').hide();
+	$('#list_screen').hide();
+	$('#new_model_screen').hide();
+	$('#run').show();
+	$('#edit_screen').hide();
+	localStorage.screen = "run";
+	$('#load_mod').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').show();
+
+	rethinkWindowSize();
+
+	n = localStorage.model_n;
+
+	var equation = "";
+	output = 0;
+	coefficients = JSON.parse(localStorage.questions)[n]["coefficients"];
+	for (const [key, value] of Object.entries(coefficients)) {
+		if (key=="intercept") {
+			//console.log(String(key)+value);
+			output += value
+			equation += String(value)
+		} else if (!key.includes("-")) {
+			//console.log(String(key)+($('#'+key).html())*value*1);
+			output += ($('#'+key).html())*value*1
+			equation += "("+String(($('#'+key).html()))+")("+String(value)+") + "
+		} else {
+			if ($('#'+key.split("-")[0]).val().toLowerCase()==key.split("-")[1].toLowerCase()) {
+				output += 1*value
+				equation += "(1)("+String(value)+") + "
+			} else {
+				output += 0
+				equation += "(0)("+String(value)+") + "
+			}
+		}
+	}
+
+	output = 100 / (1 + Math.E**(-1*output));
+	equation = String(output) + " = (100)(1 /(1 + e^(-("  + equation + "))))";
+	console.log(equation);
+
+	output = Math.round(output*100)/100;
+
+	$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+
+}
+
+function edit() {
+	$('#about').hide();
+	$('#list_screen').hide();
+	$('#new_model_screen').hide();
+	$('#run').hide();
+	$('#edit_screen').show();
+	localStorage.screen = "edit";
+	$('#load_mod').show();
+	$('#down_mod').show();
+	$('#run_mod').show();
+	$('#edit_mod').hide();
+}
+
+function load_model(n=0){
+
+	if (n<0) {
+		if (localStorage.model_n) {
+			n = localStorage.model_n;
+		} else {
+			localStorage.model_n = 0;
+		}
+	} else {
+		localStorage.model_n = n;
+	}
+
+	question = JSON.parse(localStorage.questions)[n]["question"]
+	
+	$('#model_json').val(JSON.stringify(questions[n], null, 2))
+
+	document.title = question;
+	$('#question_text').html(question);
+	$('#prediction_text').html("--<sup>&dagger;</sup>");
+	$('#n_entires').html(questions[0]["training"]["observations"].length);
+	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px'); 
+	$('#features_wrapper').scrollTop(0);
+}
+
+function snake_case(text){
+	text = text.replace(/[^a-zA-Z]/g,"_");
+	text = text.replace(/_+/g,"_");
+	text = text.replace(/^_+|_+$/g, '');
+	return text
+}
+
+//===========================================
+// Data handling
+//===========================================
+// h/t http://answers.splunk.com/answers/125819/fill-textarea-from-a-file.html
+
+var control = document.getElementById("upload");
+control.addEventListener("change", function(event){
+	if (window.File && window.FileReader && window.FileList && window.Blob) {
+		var reader = new FileReader();
+			reader.onload = function(event){
+				localStorage.game_state = event.target.result;
+
+				if (get_state('version')!="0.1") {
+            		alert("This file does not seem to be a valid v0.1 simulation file (our latest version). It may break things/not load properly. Proceed at your own risk!");
+        		}
+
+				passcheck();
+				//load_state();
+			};
+			reader.onerror = function(event){
+				console.error("File could not be read! Code " + event.target.error.code);
+			};
+			//console.log("Filename: " + control.files[0].name);
+			reader.readAsText(control.files[0]);
+	} else {
+		alert('This feature is not supported by your browser.');
+	}
+}, false);
+
+//===========================================
+// Custom keypress events
+//===========================================
+
+
+$('#reply').keypress(function(e){
+	if(e.keyCode == 13 && !e.shiftKey) {
+		e.preventDefault();
+		answer_button();
+	}
+});
+
+function delete_mod(n) {
+  let text = "Click OK to delete this model and its data or Cancel.";
+  if (confirm(text) == true) {
+	show_list();
+  }
+}
+
+// toggle wrap 
+function toggle_wrap(value) {
+	if (document.getElementById('wrap').checked) {
+		document.getElementById('model_json').wrap = "soft";
+		localStorage.word_wrap = 1;
+	} else {
+		document.getElementById('model_json').wrap = "off";	
+		localStorage.word_wrap = 0;
+	}
+	//document.getElementById('model_json').value = document.getElementById('model_json').value
+}	
+
+// https://stackoverflow.com/a/68259380
+//var editor = CodeMirror.fromTextArea(document.getElementById('model_json'), {
+//    lineNumbers: true,
+    //mode: 'text/javascript',
+//    matchBrackets: true,
+//});
+
+function load_page() {
+	i = 0;
+	for (question in JSON.parse(localStorage.questions)) {
+		$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);run_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
+		i=+ 1;
+	}
+	$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
+
+	load_model(-1);
+
+	if (localStorage.screen=="about") {
+		show_about();
+	} else if (localStorage.screen=="list") {
+		show_list();
+	} else if (localStorage.screen=="new") {
+		make_new();
+	} else if (localStorage.screen=="run") {
+		run_model();
+	} else if (localStorage.screen=="edit") {
+		edit();
+	}
+
+	dark_mode();
+	
+	//start_spinner('loading_box');
+	//passcheck();
+}
+window.onpaint = load_page();
+
+</script>
+
+<!---
+	- scroll to top for all screens
+	- get save to work
+	- get load to work
+	- fix links in dark mode
+	- log ground truth functionality
+	- build new page functionality
+	- reorder lists on model load
+	- make equations render dynamic
+	- save feature values to storage before ground truth
+	- word wrap load old (sometime defeaults to wrap without check)
+
+	- write documenation page
+	- write terms page
+
+	- create github page
+	- get domain
+
+	- what is list is empty (deleted everything)
+
+	predictions:
+	- hours (cost) on case (time to do X)
+	- value of case (win)
+	- net value of case (win-cost)
+	- outcome of case
+	- risk score
+	- expected value calculations 
+--->
+
+</HTML>
