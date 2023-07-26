@@ -105,10 +105,20 @@ function destroyClickedElement(event) {
     document.body.removeChild(event.target);
 }
 
+function load_state(clear=0){
+
+	if  (clear==1) {
+		//localStorage.removeItem('');
+		console.log("Loading home");
+
+    } else {
+		console.log("Loading game state");
+
+    }
+}
 
 //===========================================
 // Buttons
 //===========================================
-
 
 // EOF
