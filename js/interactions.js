@@ -36,7 +36,7 @@ function beep() {
 //===========================================
 // h/t http://answers.splunk.com/answers/125819/fill-textarea-from-a-file.html
 
-function save_sim() {
+function save_model() {
 	filename = snake_case(JSON.parse(localStorage.questions)[localStorage.model_n]["question"]).slice(0,25);
 	//filename = filename.toLowerCase();
     saveTextAsFile(JSON.stringify(JSON.parse(localStorage.questions)[localStorage.model_n]),filename+".txt");

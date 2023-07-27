@@ -5,7 +5,7 @@
 	<TITLE>My Toy Models</TITLE>
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="apple-touch-icon" href="images/icon_300.png"/>
 
@@ -117,9 +117,9 @@
 <div id="menu_bar" class="menu_bar">
   <a href="javascript:void('');" onClick="show_list();">Models</a>
   <input id="upload" type="file"/> 
-  &nbsp;&nbsp;<a href="javascript:void('');" onClick="load_state(1);make_new();">New</a>
-  &nbsp;&nbsp;<a id="load_mod" href="javascript:void('');" id="upload_link">Load</a>
-  &nbsp;&nbsp;<a id="down_mod" href="javascript:void('');" onClick="save_sim();">Download</a>
+  &nbsp;&nbsp;<a id="new_mod" href="javascript:void('');" onClick="load_state(1);make_new();">New</a>
+  &nbsp;&nbsp;<a id="upload_link" href="javascript:void('');">Load</a>
+  &nbsp;&nbsp;<a id="down_mod" href="javascript:void('');" onClick="save_model();">Download</a>
   <div style="float:right">
 	<a id="run_mod" href="javascript:void('');" onClick="run_model();">Run</a>
 	<a id="edit_mod" href="javascript:void('');" onClick="edit();">Edit</a>
@@ -324,7 +324,8 @@ function show_about(){
 	$('#run').hide();
 	$('#edit_screen').hide();
 	localStorage.screen = "about";
-	$('#load_mod').hide();
+	$('#new_mod').show();
+	$('#upload_link').hide();
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
@@ -337,7 +338,8 @@ function show_list() {
 	$('#run').hide();
 	$('#edit_screen').hide();
 	localStorage.screen = "list";
-	$('#load_mod').hide();
+	$('#new_mod').show();
+	$('#upload_link').hide();
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
@@ -350,7 +352,8 @@ function make_new() {
 	$('#run').hide();
 	$('#edit_screen').hide();
 	localStorage.screen = "new";
-	$('#load_mod').hide();
+	$('#new_mod').hide();
+	$('#upload_link').hide();
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
@@ -363,7 +366,8 @@ function run_model(){
 	$('#run').show();
 	$('#edit_screen').hide();
 	localStorage.screen = "run";
-	$('#load_mod').hide();
+	$('#new_mod').show();
+	$('#upload_link').hide();
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').show();
@@ -412,7 +416,8 @@ function edit() {
 	$('#run').hide();
 	$('#edit_screen').show();
 	localStorage.screen = "edit";
-	$('#load_mod').show();
+	$('#new_mod').show();
+	$('#upload_link').show();
 	$('#down_mod').show();
 	$('#run_mod').show();
 	$('#edit_mod').hide();
@@ -497,6 +502,15 @@ function delete_mod(n) {
   }
 }
 
+function check_wrap(){
+	if (localStorage.word_wrap == 1) {
+		$( "#wrap" ).prop( "checked", true );
+		document.getElementById('model_json').wrap = "soft";
+	} else {
+		document.getElementById('model_json').wrap = "off";	
+	}
+}
+
 // toggle wrap 
 function toggle_wrap(value) {
 	if (document.getElementById('wrap').checked) {
@@ -517,6 +531,7 @@ function toggle_wrap(value) {
 //});
 
 function load_page() {
+
 	i = 0;
 	for (question in JSON.parse(localStorage.questions)) {
 		$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);run_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
@@ -526,9 +541,7 @@ function load_page() {
 
 	load_model(-1);
 
-	if (localStorage.screen=="about") {
-		show_about();
-	} else if (localStorage.screen=="list") {
+	if (localStorage.screen=="list") {
 		show_list();
 	} else if (localStorage.screen=="new") {
 		make_new();
@@ -536,8 +549,11 @@ function load_page() {
 		run_model();
 	} else if (localStorage.screen=="edit") {
 		edit();
+	} else {
+		show_about();
 	}
 
+	check_wrap();
 	dark_mode();
 	
 	//start_spinner('loading_box');
@@ -545,29 +561,45 @@ function load_page() {
 }
 window.onpaint = load_page();
 
+var changes = 0;
+$(window).bind('beforeunload', function(){
+  if (changes==1) {
+    return 'Are you sure you want to leave?';
+  } else {
+	return undefined
+  }
+});
+
 </script>
 
 <!---
-	- scroll to top for all screens
-	- get save to work
-	- get load to work
-	- fix links in dark mode
-	- log ground truth functionality
-	- build new page functionality
-	- reorder lists on model load
+	// Functional
 	- make equations render dynamic
-	- save feature values to storage before ground truth
-	- word wrap load old (sometime defeaults to wrap without check)
 
+	- get load to work
+	- reorder lists on model load
+	- get delete to work
+		- what if list is empty (deleted everything) check behavior
+	- log ground truth functionality (upload status)
+	- save feature values to storage before ground truth (save state)
+	- build new page functionality
+	- add training feature
+	- prompt to save before leaving edit page if change
+
+	// Cosmetic
+	- remove or recolor top border line from dark modes
+	- scroll to top for all screens
+	- stop features jump on prediction recaluclate
+	- fix links in dark mode
+
+	// Writing
 	- write documenation page
 	- write terms page
 
-	- create github page
+	// DevOps
 	- get domain
 
-	- what is list is empty (deleted everything)
-
-	predictions:
+	Some predictions to play with:
 	- hours (cost) on case (time to do X)
 	- value of case (win)
 	- net value of case (win-cost)
