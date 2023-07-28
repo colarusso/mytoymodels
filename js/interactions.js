@@ -42,12 +42,12 @@ function save_model() {
     saveTextAsFile(JSON.stringify(JSON.parse(localStorage.questions)[localStorage.model_n]),filename+".txt");
 }
 
-$(function(){
-	$("#upload_link").on('click', function(e){
-		e.preventDefault();
-		$("#upload:hidden").trigger('click');
-	});
-});
+//$(function(){
+//	$("#upload_link").on('click', function(e){
+//		e.preventDefault();
+//		$("#upload:hidden").trigger('click');
+//	});
+//});
 
 function saveTextAsFile(tosave,name) {
     // h/t http://runnable.com/U5HC9xtufQpsu5aj/use-javascript-to-save-textarea-as-a-txt-file 

@@ -100,7 +100,11 @@
   'intercept': 0.0},
   'performance': {"r-squared":0.2}}]
 
-	localStorage.questions = JSON.stringify(questions)
+	if (!localStorage.questions) {
+		localStorage.questions = JSON.stringify(questions)
+	}
+
+	//localStorage.questions = JSON.stringify(questions)
 
 	</script>
 	
@@ -118,10 +122,10 @@
   <a href="javascript:void('');" onClick="show_list();">Models</a>
   <input id="upload" type="file"/> 
   &nbsp;&nbsp;<a id="new_mod" href="javascript:void('');" onClick="load_state(1);make_new();">New</a>
-  &nbsp;&nbsp;<a id="upload_link" href="javascript:void('');">Load</a>
+  &nbsp;&nbsp;<a id="upload_link" href="javascript:void('');" onClick="upload_file(1);">Load</a>
   &nbsp;&nbsp;<a id="down_mod" href="javascript:void('');" onClick="save_model();">Download</a>
   <div style="float:right">
-	<a id="run_mod" href="javascript:void('');" onClick="run_model();">Run</a>
+	<a id="run_mod" href="javascript:void('');" onClick="show_model();">Run</a>
 	<a id="edit_mod" href="javascript:void('');" onClick="edit();">Edit</a>
   </div>
 </div>
@@ -161,7 +165,7 @@
 		<p>Go ahead, create a model.</p>
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
-			<a href="javascript:void('')" onClick="make_new();" class="button">From a File</a>
+			<a href="javascript:void('')" onClick="upload_file();" class="button">From a File</a>
 		</div>
 	</div>
 </div>
@@ -243,7 +247,7 @@
 			You can experiemnt with edits to your model below or read <a href="" target="_blank">the documentation</a>.<sup>&dagger;</sup>
 		</p>
 
-		<textarea id="model_json" style="width:100%;height:55vh;"></textarea>
+		<textarea id="model_json" style="width:100%;height:55vh;" oninput="changes=1"></textarea>
 
 		<div id="wrap_box" style="display: block;">
 		<label>
@@ -329,9 +333,18 @@ function show_about(){
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
+	dark_mode();
 }
 
 function show_list() {
+	$('#list').empty();
+	i = 0;
+	for (question in JSON.parse(localStorage.questions)) {
+		$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
+		i=+ 1;
+	}
+	$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
+
 	$('#about').hide();
 	$('#list_screen').show();
 	$('#new_model_screen').hide();
@@ -343,6 +356,7 @@ function show_list() {
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
+	dark_mode();
 }
 
 function make_new() {
@@ -357,9 +371,13 @@ function make_new() {
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').hide();
+	dark_mode();
 }
 
-function run_model(){
+function show_model() {
+
+	load_model();
+	
 	$('#about').hide();
 	$('#list_screen').hide();
 	$('#new_model_screen').hide();
@@ -371,14 +389,18 @@ function run_model(){
 	$('#down_mod').hide();
 	$('#run_mod').hide();
 	$('#edit_mod').show();
+	dark_mode();
 
 	rethinkWindowSize();
 
-	n = localStorage.model_n;
+	run_model();
+}
+
+function run_model(){
 
 	var equation = "";
 	output = 0;
-	coefficients = JSON.parse(localStorage.questions)[n]["coefficients"];
+	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
 	for (const [key, value] of Object.entries(coefficients)) {
 		if (key=="intercept") {
 			//console.log(String(key)+value);
@@ -421,23 +443,18 @@ function edit() {
 	$('#down_mod').show();
 	$('#run_mod').show();
 	$('#edit_mod').hide();
+	dark_mode();
 }
 
 function load_model(n=0){
 
-	if (n<0) {
-		if (localStorage.model_n) {
-			n = localStorage.model_n;
-		} else {
-			localStorage.model_n = 0;
-		}
-	} else {
-		localStorage.model_n = n;
-	}
+	var question_arr = JSON.parse(localStorage.questions)
+	question_arr.unshift(question_arr.splice(n, 1)[0]);
+	localStorage.questions = JSON.stringify(question_arr)
 
-	question = JSON.parse(localStorage.questions)[n]["question"]
+	question = question_arr[0]["question"]
 	
-	$('#model_json').val(JSON.stringify(questions[n], null, 2))
+	$('#model_json').val(JSON.stringify(question_arr[0], null, 2))
 
 	document.title = question;
 	$('#question_text').html(question);
@@ -454,6 +471,12 @@ function snake_case(text){
 	return text
 }
 
+var overwrite_mod = 0;
+function upload_file(overwrite_mod=0) {
+    overwrite_mod = overwrite_mod;
+    $("#upload:hidden").trigger('click');
+}
+
 //===========================================
 // Data handling
 //===========================================
@@ -464,14 +487,18 @@ control.addEventListener("change", function(event){
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		var reader = new FileReader();
 			reader.onload = function(event){
-				localStorage.game_state = event.target.result;
+				this_model = event.target.result;
 
-				if (get_state('version')!="0.1") {
-            		alert("This file does not seem to be a valid v0.1 simulation file (our latest version). It may break things/not load properly. Proceed at your own risk!");
-        		}
+				//if (get_state('version')!="0.1") {
+            	//	alert("This file does not seem to be a valid v0.1 simulation file (our latest version). It may break things/not load properly. Proceed at your own risk!");
+        		//} else {
+					localStorage.questions = JSON.stringify([JSON.parse(this_model)].concat(JSON.parse(localStorage.questions)));
+					//load_state();
+					if (overwrite_mod==0){
+						show_list();
+					} 
+				//}
 
-				passcheck();
-				//load_state();
 			};
 			reader.onerror = function(event){
 				console.error("File could not be read! Code " + event.target.error.code);
@@ -498,6 +525,9 @@ $('#reply').keypress(function(e){
 function delete_mod(n) {
   let text = "Click OK to delete this model and its data or Cancel.";
   if (confirm(text) == true) {
+	var question_arr =  JSON.parse(localStorage.questions)
+	var tmp = question_arr.shift();
+	localStorage.questions = JSON.stringify(question_arr);
 	show_list();
   }
 }
@@ -532,13 +562,6 @@ function toggle_wrap(value) {
 
 function load_page() {
 
-	i = 0;
-	for (question in JSON.parse(localStorage.questions)) {
-		$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);run_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
-		i=+ 1;
-	}
-	$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
-
 	load_model(-1);
 
 	if (localStorage.screen=="list") {
@@ -546,7 +569,7 @@ function load_page() {
 	} else if (localStorage.screen=="new") {
 		make_new();
 	} else if (localStorage.screen=="run") {
-		run_model();
+		show_model();
 	} else if (localStorage.screen=="edit") {
 		edit();
 	} else {
@@ -554,7 +577,6 @@ function load_page() {
 	}
 
 	check_wrap();
-	dark_mode();
 	
 	//start_spinner('loading_box');
 	//passcheck();
@@ -570,26 +592,39 @@ $(window).bind('beforeunload', function(){
   }
 });
 
+function save_changes() {
+	var question_arr = JSON.parse(localStorage.questions);
+	question_arr[0] = JSON.parse($('#model_json').val());
+	localStorage.questions = JSON.stringify(question_arr);
+	changes = 0;
+}
+
 </script>
 
 <!---
 	// Functional
 	- make equations render dynamic
 
-	- get load to work
-	- reorder lists on model load
-	- get delete to work
-		- what if list is empty (deleted everything) check behavior
+	X get load to work
+	X reorder lists on model load
+	X get delete to work
+		X what if list is empty (deleted everything) check behavior
+	X Save changes
+	- prompt to save before leaving edit page if change
+	- Check for valid format (add to save and load)
+	- build running page from json
 	- log ground truth functionality (upload status)
 	- save feature values to storage before ground truth (save state)
 	- build new page functionality
 	- add training feature
-	- prompt to save before leaving edit page if change
+
+	- add interaction terms
+	- add exclude terms list
 
 	// Cosmetic
 	- remove or recolor top border line from dark modes
-	- scroll to top for all screens
-	- stop features jump on prediction recaluclate
+	- scroll to top for all screens on change
+	X stop features jump on prediction recaluclate
 	- fix links in dark mode
 
 	// Writing
