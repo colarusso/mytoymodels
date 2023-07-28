@@ -1,7 +1,7 @@
 * {
 	box-sizing: border-box;
   }
-  
+
 html {
     -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
 }
@@ -92,7 +92,6 @@ body {
 	color: white;
 }
 
-
 #upload{
     display:none
 }
@@ -136,8 +135,7 @@ body {
 }
 
 .new_model {
-	border-top: 1px solid #7b7b7b;
-	margin: 39px auto 100px auto;
+	margin: 39px auto 175px auto;
 	padding: 15px 15px 40px 15px;
 	max-width: 650px;
 }
@@ -212,10 +210,9 @@ body {
 }
 
 .edit {
-	margin-top: 39px;
+	margin-top: 40px;
 	margin-bottom: 100px;
-	padding:0 15px;
-	border-top: 1px solid #7b7b7b;
+	padding:1px 15px 15px 15px;
 }
 
 #wrap_box {

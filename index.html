@@ -140,6 +140,8 @@
 	</p>
 	<p>I haven't embedded analytics or tracking here, and all your data stays on your device/ My hope is this will free you to experiment honestly. But it means I don't know if folks are even using this tool unless they tell me. So, I'd apprechiate you telling what you're up to. You can find me <a href="" target="_blank">@Colarusso@mastodon.social</a> or use <a href="" target="_blank">this feedback form</a>. Want to look at the code? Check out <a href="" target="_blank">this GitHub repo</a>.</p>
 
+	<p><a href="" target="_blank">the documentation</a></p>
+
 	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 	<div class="button_container">
 		<a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a>
@@ -154,14 +156,12 @@
 			<img src="images/boxquote.png" alt="'All models are wrong, but some are useful.' - George Box" width="100%"/>
 			<div class="caption">Maps are models, and they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
 		</div>
-		<p>
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
 		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		</p>
 		<p>Go ahead, create a model.</p>
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
@@ -300,6 +300,7 @@ function dark_mode(change=null){
 	if(m==1){
 		$('body').css("background","black"); 
 		$('body').css("color","white");
+		//$('about a:link').css("color","#0a9de7");
 		$("#menu_bar").attr('class', 'menu_bar_dark');
 		$("#list").attr('class', 'list_dark');
 		$("div[class='list_item']").attr('class', 'list_item_dark');
@@ -311,6 +312,7 @@ function dark_mode(change=null){
 	} else {
 		$('body').css("background","white"); 
 		$('body').css("color","black"); 
+		//$('body a:link').css("color","blue");
 		$("#menu_bar").attr('class', 'menu_bar');
 		$("#list").attr('class', 'list');
 		$("div[class='list_item_dark']").attr('class', 'list_item');
@@ -640,24 +642,27 @@ function save_changes() {
 		X what if list is empty (deleted everything) check behavior
 	X Save changes
 	X prompt to save before leaving edit page if change
+	- load into existing or add new
+	- add save check to upload
+	- figure out what you are downloading when in edit (saved or written)
 	- Check for valid format (add to save and load)
-	- build running page from json
+	- [NEW SCREEN] dynamicly build run model page from json
 	- log ground truth functionality (upload status)
 	- save feature values to storage before ground truth (save state)
-	- build new page functionality
-	- add training feature
+	- [NEW SCREEN] build new page functionality
+	- [NEW SCREEN] add training feature
 
 	- add interaction terms
 	- add exclude terms list
 
 	// Cosmetic
-	- remove or recolor top border line from dark modes
-	- proper padding on all pages footer
-	- scroll to top for all screens on change
 	X stop features jump on prediction recaluclate
-	- fix links in dark mode
-	- recalculate stuff on rotate
 	X get title to change back to My Models
+	X recalculate stuff on rotate
+	X remove or recolor top border line from dark modes
+	X proper padding on all pages footer
+	- scroll to top for all screens on change
+	- fix links in dark mode
 
 	// Writing
 	- write documenation page
