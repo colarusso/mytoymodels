@@ -175,7 +175,7 @@
 		<h1 id="question_text">Loading...</h1>
 		<h2 id="prediction_text">--</h2>
 		<p>
-			Based on <a href="javascript:void('');" onClick="alert('download csv')"><span id="n_entires"><i>n</i></span> observations</a>
+			Based on <span id="n_entires"><i>n</i></span> <a href="javascript:void('');" onClick="alert('download csv')">observations</a>
 		</p>
 	</div>
 	<div id="features_wrapper">  
@@ -250,8 +250,8 @@
 		<textarea id="model_json" style="width:100%;height:55vh;" oninput="changes=1"></textarea>
 
 		<div id="wrap_box" style="display: block;">
-		<label>
-			<input type="checkbox" id="wrap" name="wrap" value="1" onchange="toggle_wrap('');"> word wrap</label> 
+		<span style="float:right"><a href="javascript:void('');">observations.csv</a></span>
+		<label><input type="checkbox" id="wrap" name="wrap" value="1" onchange="toggle_wrap('');"> word wrap</label> 
 		</div>
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="save_changes();" class="button">Save Changes</a>
@@ -557,7 +557,7 @@ $('#reply').keypress(function(e){
 });
 
 function delete_mod(n) {
-  let text = "Click OK to delete this model and its data or Cancel.";
+  let text = "Click OK to delete this model and its data or Cancel to do nothing.";
   if (confirm(text) == true) {
 	var question_arr =  JSON.parse(localStorage.questions)
 	var tmp = question_arr.shift();
@@ -642,10 +642,10 @@ function save_changes() {
 		X what if list is empty (deleted everything) check behavior
 	X Save changes
 	X prompt to save before leaving edit page if change
+	- Check for valid format (add to save and load)
 	- load into existing or add new
 	- add save check to upload
 	- figure out what you are downloading when in edit (saved or written)
-	- Check for valid format (add to save and load)
 	- [NEW SCREEN] dynamicly build run model page from json
 	- log ground truth functionality (upload status)
 	- save feature values to storage before ground truth (save state)
@@ -665,6 +665,7 @@ function save_changes() {
 	- fix links in dark mode
 
 	// Writing
+	- write feedback form
 	- write documenation page
 	- write terms page
 
