@@ -126,7 +126,7 @@
   &nbsp;&nbsp;<a id="down_mod" href="javascript:void('');" onClick="save_model();">Download</a>
   <div style="float:right">
 	<a id="run_mod" href="javascript:void('');" onClick="show_model();">Run</a>
-	<a id="edit_mod" href="javascript:void('');" onClick="edit();">Edit</a>
+	<a id="edit_mod" href="javascript:void('');" onClick="show_edit();">Edit</a>
   </div>
 </div>
 
@@ -283,19 +283,20 @@ function rethinkWindowSize() {
 
 window.onresize = rethinkWindowSize;
 
-function dark_mode(change=null){
+$(window).on("orientationchange", function( event ) {
+	rethinkWindowSize();
+});
 
+function dark_mode(change=null){
 	if (localStorage.dark_mode) {
 		m = localStorage.dark_mode
 	} else {
 		m = 0;
 		localStorage.dark_mode = m;
 	}
-
 	if (change) {
 		m = 1-m;
 	}
-
 	if(m==1){
 		$('body').css("background","black"); 
 		$('body').css("color","white");
@@ -322,82 +323,137 @@ function dark_mode(change=null){
 }
 
 function show_about(){
-	$('#about').show();
-	$('#list_screen').hide();
-	$('#new_model_screen').hide();
-	$('#run').hide();
-	$('#edit_screen').hide();
-	localStorage.screen = "about";
-	$('#new_mod').show();
-	$('#upload_link').hide();
-	$('#down_mod').hide();
-	$('#run_mod').hide();
-	$('#edit_mod').hide();
-	dark_mode();
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		document.title = "About My Toy Models";
+		$('#about').show();
+		$('#list_screen').hide();
+		$('#new_model_screen').hide();
+		$('#run').hide();
+		$('#edit_screen').hide();
+		localStorage.screen = "about";
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+	}
 }
 
 function show_list() {
-	$('#list').empty();
-	i = 0;
-	for (question in JSON.parse(localStorage.questions)) {
-		$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
-		i=+ 1;
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
 	}
-	$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
+	if (go==1) {
+		changes = 0;
+		document.title = "My Toy Models";
+		$('#list').empty();
+		i = 0;
+		for (question in JSON.parse(localStorage.questions)) {
+			$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
+			i=+ 1;
+		}
+		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
 
-	$('#about').hide();
-	$('#list_screen').show();
-	$('#new_model_screen').hide();
-	$('#run').hide();
-	$('#edit_screen').hide();
-	localStorage.screen = "list";
-	$('#new_mod').show();
-	$('#upload_link').hide();
-	$('#down_mod').hide();
-	$('#run_mod').hide();
-	$('#edit_mod').hide();
-	dark_mode();
+		$('#about').hide();
+		$('#list_screen').show();
+		$('#new_model_screen').hide();
+		$('#run').hide();
+		$('#edit_screen').hide();
+		localStorage.screen = "list";
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+	}
 }
 
 function make_new() {
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		document.title = "Make New Model";
+		$('#about').hide();
+		$('#list_screen').hide();
+		$('#new_model_screen').show();
+		$('#run').hide();
+		$('#edit_screen').hide();
+		localStorage.screen = "new";
+		$('#new_mod').hide();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+	}
+}
+
+function show_model() {
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		load_model();
+		document.title = "Model: "+JSON.parse(localStorage.questions)[0]["question"];
+		$('#about').hide();
+		$('#list_screen').hide();
+		$('#new_model_screen').hide();
+		$('#run').show();
+		$('#edit_screen').hide();
+		localStorage.screen = "run";
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').show();
+		dark_mode();
+		rethinkWindowSize();
+		run_model();
+	}
+}
+
+function show_edit() {
+	document.title = "Edit: "+JSON.parse(localStorage.questions)[0]["question"];
 	$('#about').hide();
 	$('#list_screen').hide();
-	$('#new_model_screen').show();
+	$('#new_model_screen').hide();
 	$('#run').hide();
-	$('#edit_screen').hide();
-	localStorage.screen = "new";
-	$('#new_mod').hide();
-	$('#upload_link').hide();
-	$('#down_mod').hide();
-	$('#run_mod').hide();
+	$('#edit_screen').show();
+	localStorage.screen = "edit";
+	$('#new_mod').show();
+	$('#upload_link').show();
+	$('#down_mod').show();
+	$('#run_mod').show();
 	$('#edit_mod').hide();
 	dark_mode();
 }
 
-function show_model() {
-
-	load_model();
-	
-	$('#about').hide();
-	$('#list_screen').hide();
-	$('#new_model_screen').hide();
-	$('#run').show();
-	$('#edit_screen').hide();
-	localStorage.screen = "run";
-	$('#new_mod').show();
-	$('#upload_link').hide();
-	$('#down_mod').hide();
-	$('#run_mod').hide();
-	$('#edit_mod').show();
-	dark_mode();
-
-	rethinkWindowSize();
-
-	run_model();
-}
-
 function run_model(){
-
 	var equation = "";
 	output = 0;
 	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
@@ -420,43 +476,20 @@ function run_model(){
 			}
 		}
 	}
-
 	output = 100 / (1 + Math.E**(-1*output));
 	equation = String(output) + " = (100)(1 /(1 + e^(-("  + equation + "))))";
 	console.log(equation);
-
 	output = Math.round(output*100)/100;
-
 	$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
-
-}
-
-function edit() {
-	$('#about').hide();
-	$('#list_screen').hide();
-	$('#new_model_screen').hide();
-	$('#run').hide();
-	$('#edit_screen').show();
-	localStorage.screen = "edit";
-	$('#new_mod').show();
-	$('#upload_link').show();
-	$('#down_mod').show();
-	$('#run_mod').show();
-	$('#edit_mod').hide();
-	dark_mode();
 }
 
 function load_model(n=0){
-
 	var question_arr = JSON.parse(localStorage.questions)
 	question_arr.unshift(question_arr.splice(n, 1)[0]);
 	localStorage.questions = JSON.stringify(question_arr)
-
 	question = question_arr[0]["question"]
-	
 	$('#model_json').val(JSON.stringify(question_arr[0], null, 2))
-
-	document.title = question;
+	//document.title = question;
 	$('#question_text').html(question);
 	$('#prediction_text').html("--<sup>&dagger;</sup>");
 	$('#n_entires').html(questions[0]["training"]["observations"].length);
@@ -514,7 +547,6 @@ control.addEventListener("change", function(event){
 // Custom keypress events
 //===========================================
 
-
 $('#reply').keypress(function(e){
 	if(e.keyCode == 13 && !e.shiftKey) {
 		e.preventDefault();
@@ -561,9 +593,7 @@ function toggle_wrap(value) {
 //});
 
 function load_page() {
-
-	load_model(-1);
-
+	load_model();
 	if (localStorage.screen=="list") {
 		show_list();
 	} else if (localStorage.screen=="new") {
@@ -571,22 +601,21 @@ function load_page() {
 	} else if (localStorage.screen=="run") {
 		show_model();
 	} else if (localStorage.screen=="edit") {
-		edit();
+		show_edit();
 	} else {
 		show_about();
 	}
-
 	check_wrap();
-	
 	//start_spinner('loading_box');
 	//passcheck();
 }
+
 window.onpaint = load_page();
 
 var changes = 0;
 $(window).bind('beforeunload', function(){
   if (changes==1) {
-    return 'Are you sure you want to leave?';
+    return 'Are you sure you want to leave? Changes will not be saved.';
   } else {
 	return undefined
   }
@@ -610,7 +639,7 @@ function save_changes() {
 	X get delete to work
 		X what if list is empty (deleted everything) check behavior
 	X Save changes
-	- prompt to save before leaving edit page if change
+	X prompt to save before leaving edit page if change
 	- Check for valid format (add to save and load)
 	- build running page from json
 	- log ground truth functionality (upload status)
@@ -623,9 +652,12 @@ function save_changes() {
 
 	// Cosmetic
 	- remove or recolor top border line from dark modes
+	- proper padding on all pages footer
 	- scroll to top for all screens on change
 	X stop features jump on prediction recaluclate
 	- fix links in dark mode
+	- recalculate stuff on rotate
+	X get title to change back to My Models
 
 	// Writing
 	- write documenation page
