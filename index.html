@@ -114,7 +114,6 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/abbott.min.css"></link>-->
 
-
 </HEAD>
 
 <BODY BGCOLOR="#ffffff" BACKGROUND="" MARGINWIDTH="0" MARGINHEIGHT="0">
@@ -132,7 +131,7 @@
 
 <div id="about" class="about">
 	<p>
-	If you’ve ever wanted to “run a study” on some aspect of your personal life, this site is for you. It lets you "science the heck" out of your pet hypotheses—building simple predictive models (<a href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank">regressions</a>) around your data. All the number crunching runs in your browser. So your data stays on your device (unless you activly download and share it, which I tried to make easy).  
+	If you’ve ever wanted to “run a study” on some aspect of your personal life, this site is for you. It lets you "science the heck" out of your pet hypotheses—building simple predictive models (<a href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank" class="body_links">regressions</a>) around your data. All the number crunching runs in your browser. So your data stays on your device (unless you activly download and share it, which I tried to make easy).  
 	</p>
 	<img src="images/colarusso.jpg" style="border-radius: 50%;float:left;width:50px;margin:0 15px 5px 0;"/>
 	<p>
@@ -144,7 +143,7 @@
 
 	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 	<div class="button_container">
-		<a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a>
+		<a href="javascript:void('')" onClick="make_new();" class="button">New Model</a>
 	</div>
 </div>
 
@@ -156,16 +155,12 @@
 			<img src="images/boxquote.png" alt="'All models are wrong, but some are useful.' - George Box" width="100%"/>
 			<div class="caption">Maps are models, and they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
 		</div>
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		lorum ipsum hasdh jkahsdl kjasd ajksdjakhdh k asdjhsakhdh h sdhaf kjashk ksjh alfkshkhsdf asjdkf
-		<p>Go ahead, create a model.</p>
+		Remember, just because a model provides an answer, that doesn't mean that the answer is correct. 
+		<p>Go ahead, make a model.</p>
 		<div class="button_container">
-			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
+			<a href="javascript:void('')" onClick="make_new();" class="button">From Library</a>
 			<a href="javascript:void('')" onClick="upload_file();" class="button">From a File</a>
+			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
 		</div>
 	</div>
 </div>
@@ -231,8 +226,8 @@
 
 				<p>Curent Model Performance:<sup>*</sup></p>
 				<ul>
-					<li><a href="" target="_blank">R-squared</a> = 0.5</li>
-					<li><a href="" target="_blank">accuracey</a> = 0.5</li>
+					<li><a href="" target="_blank" class="body_links">R-squared</a> = 0.5</li>
+					<li><a href="" target="_blank" class="body_links">accuracey</a> = 0.5</li>
 				</ul>
 				<sup>*</sup>Arrived at using k-folds 
 			</p>
@@ -244,13 +239,13 @@
 <div id="edit_screen" class="edit_screen">
 	<div id="edit" class="edit">
 		<p>
-			You can experiemnt with edits to your model below or read <a href="" target="_blank">the documentation</a>.<sup>&dagger;</sup>
+			You can experiemnt with edits to your model below or read <a href="javascript:void('');" target="_blank" class="body_links">the documentation</a>.<sup>&dagger;</sup>
 		</p>
 
 		<textarea id="model_json" style="width:100%;height:55vh;" oninput="changes=1"></textarea>
 
 		<div id="wrap_box" style="display: block;">
-		<span style="float:right"><a href="javascript:void('');">observations.csv</a></span>
+		<span style="float:right"><a href="javascript:void('');" class="body_links">observations.csv</a></span>
 		<label><input type="checkbox" id="wrap" name="wrap" value="1" onchange="toggle_wrap('');"> word wrap</label> 
 		</div>
 		<div class="button_container">
@@ -258,7 +253,7 @@
 			<a href="javascript:void('')" onClick="make_new();" class="button">Save &amp; Train</a>
 			<a href="javascript:void('')" onClick="delete_mod();" class="button" style="background:#c61c1c">Delete</a>
 		</div>
-		<div style="float:left;width:100%;margin:5px 0 60px 0;">
+		<div style="float:left;width:100%;margin:5px 0 70px 0;">
 		<sup>&dagger;</sup> FWIW, the documenation discusses how to add advanced features like interaction terms.
 		</div>
 	</div>
@@ -305,6 +300,7 @@ function dark_mode(change=null){
 		$("#list").attr('class', 'list_dark');
 		$("div[class='list_item']").attr('class', 'list_item_dark');
 		$("#prediction").attr('class', 'prediction_dark');
+		$("a[class='body_links']").attr('class', 'body_links_dark');
 		$("#footer").attr('class', 'footer_dark');
 		$('#mode').html("💡"); 
 		$("input,textarea,select,.regression").css('opacity', 0.75) 
@@ -317,6 +313,7 @@ function dark_mode(change=null){
 		$("#list").attr('class', 'list');
 		$("div[class='list_item_dark']").attr('class', 'list_item');
 		$("#prediction").attr('class', 'prediction');
+		$("a[class='body_links_dark']").attr('class', 'body_links');
 		$("#footer").attr('class', 'footer');
 		$('#mode').html("🌗"); 
 		$("input,textarea,select,.regression").css('opacity', 1) 
@@ -347,6 +344,7 @@ function show_about(){
 		$('#run_mod').hide();
 		$('#edit_mod').hide();
 		dark_mode();
+		window.scrollTo(0,0);
 	}
 }
 
@@ -367,7 +365,7 @@ function show_list() {
 			$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
 			i=+ 1;
 		}
-		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">Make a Model</a></div>`);
+		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
 
 		$('#about').hide();
 		$('#list_screen').show();
@@ -381,6 +379,7 @@ function show_list() {
 		$('#run_mod').hide();
 		$('#edit_mod').hide();
 		dark_mode();
+		window.scrollTo(0,0);
 	}
 }
 
@@ -407,6 +406,7 @@ function make_new() {
 		$('#run_mod').hide();
 		$('#edit_mod').hide();
 		dark_mode();
+		window.scrollTo(0,0);
 	}
 }
 
@@ -453,6 +453,8 @@ function show_edit() {
 	$('#run_mod').show();
 	$('#edit_mod').hide();
 	dark_mode();
+	window.scrollTo(0,0);
+	$('#model_json').scrollTop(0); 
 }
 
 function run_model(){
@@ -642,15 +644,17 @@ function save_changes() {
 		X what if list is empty (deleted everything) check behavior
 	X Save changes
 	X prompt to save before leaving edit page if change
+	- [NEW SCREEN] from library
 	- Check for valid format (add to save and load)
 	- load into existing or add new
-	- add save check to upload
+	- add save check to upload ???
 	- figure out what you are downloading when in edit (saved or written)
-	- [NEW SCREEN] dynamicly build run model page from json
+	- dynamicly build run model page from json
 	- log ground truth functionality (upload status)
 	- save feature values to storage before ground truth (save state)
 	- [NEW SCREEN] build new page functionality
 	- [NEW SCREEN] add training feature
+	- [NEW SCREEN] terms
 
 	- add interaction terms
 	- add exclude terms list
@@ -661,8 +665,9 @@ function save_changes() {
 	X recalculate stuff on rotate
 	X remove or recolor top border line from dark modes
 	X proper padding on all pages footer
-	- scroll to top for all screens on change
-	- fix links in dark mode
+	X fix links in dark mode
+	X format caption text
+	X scroll to top for all screens on change
 
 	// Writing
 	- write feedback form
@@ -672,7 +677,12 @@ function save_changes() {
 	// DevOps
 	- get domain
 
+	//Post MVP
+	- search for library and modles lists
+
 	Some predictions to play with:
+	- How long will my run be?
+	- Will I have a good sleep?
 	- hours (cost) on case (time to do X)
 	- value of case (win)
 	- net value of case (win-cost)
