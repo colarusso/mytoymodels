@@ -153,10 +153,11 @@
 	<div id="new_model" class="new_model">
 		<div class="l_img_embed" style="max-width:400px;">
 			<img src="images/boxquote.png" alt="'All models are wrong, but some are useful.' - George Box" width="100%"/>
-			<div class="caption">Maps are models, and they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
+			<div class="caption">Maps are models; they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
 		</div>
-		Remember, just because a model provides an answer, that doesn't mean that the answer is correct. 
-		<p>Go ahead, make a model.</p>
+		A model providing an answer <a href="https://www.codingthelaw.org/Fall_2022/level/4/#intro_vid" target="_blank" class="body_links">isn't a guarentee</a> that it's "right." <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank" class="body_links">Toy models</a> are intentional simplifications meant to help folks understand how things relate to eachother. This understanding, however, only comes through play. You need to know your subject matter and get your hands dirty wadding through the data&mdash;tweaking this and fiddling with that. 
+		<p>Maybe you'll create a sleep log and figure out when it's safe to have that last coffee or discover some feature you didn't think was important really is the best predictor of your mood but only if you take the time to explore possible features and collect lots of data. Even then, remember, correlation isn't causation; <a href="https://www.kdnuggets.com/2017/02/hill-data-scientist-xkcd-story.html" target="_blank" class="body_links">consider the context</a>. And beware, for if you torture the data long enough, it will <a href="https://en.wikipedia.org/wiki/Data_dredging" target="_blank" class="body_links">confess to anything</a>. <!--For more on model making, check out this short lecture.--></p>
+		<p>Now go ahead, make a model.</p>
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="make_new();" class="button">From Library</a>
 			<a href="javascript:void('')" onClick="upload_file();" class="button">From a File</a>
@@ -559,7 +560,7 @@ $('#reply').keypress(function(e){
 });
 
 function delete_mod(n) {
-  let text = "Click OK to delete this model and its data or Cancel to do nothing.";
+  let text = "Press OK to delete this model and its data or Cancel to do nothing.";
   if (confirm(text) == true) {
 	var question_arr =  JSON.parse(localStorage.questions)
 	var tmp = question_arr.shift();
