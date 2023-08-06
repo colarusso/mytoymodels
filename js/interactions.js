@@ -37,9 +37,17 @@ function beep() {
 // h/t http://answers.splunk.com/answers/125819/fill-textarea-from-a-file.html
 
 function save_model() {
-	filename = snake_case(JSON.parse(localStorage.questions)[localStorage.model_n]["question"]).slice(0,25);
-	//filename = filename.toLowerCase();
-    saveTextAsFile(JSON.stringify(JSON.parse(localStorage.questions)[localStorage.model_n]),filename+".txt");
+    this_model = JSON.parse($('#model_json').val())
+    error_msg = format_check(this_model);
+    if (error_msg.length>0) {
+        alert("There is a problem with this model's format. " + error_msg);
+    } else {
+        filename = snake_case(this_model["question"]).slice(0,25);
+        //filename = snake_case(JSON.parse(localStorage.questions)[0]["question"]).slice(0,25);
+        //filename = filename.toLowerCase();
+        //saveTextAsFile(JSON.stringify(JSON.parse(localStorage.questions)[0]),filename+".txt");
+        saveTextAsFile(JSON.stringify(this_model),filename+".txt");
+    }
 }
 
 //$(function(){

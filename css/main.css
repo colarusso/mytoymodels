@@ -138,6 +138,21 @@ body {
 	border-bottom: 1px solid #000;
 }
 
+.plus {
+	float:right;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	width:20px;
+	height:20px;
+	font-size: 15px;
+	line-height: 18px;
+	border-radius: 50%;
+	border: 1px solid #616161;
+	text-decoration: none;
+	color:#000;
+	background:#7bfd57;
+}
+
 .new_model_screen {
 	display: none;
 }
@@ -200,6 +215,10 @@ body {
 	margin: 0px 0px 15px 0px;
 	box-sizing: border-box;
 	text-decoration: none;
+  }
+
+  .button:active {
+	background: rgb(19, 160, 0);
   }
 
 .regression {

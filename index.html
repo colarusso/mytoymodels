@@ -32,87 +32,13 @@
 
 	<script src="js/spin.min.js"></script>
 	<script src="js/interactions.js?v=2023-05-10.13:09"></script>
-	<script>
-		questions = [{'question': 'Will X happen?','training':{'observations':0}},
-		
-		{'question': 'will it rain tomorrow?',
- 'type': 'categorical',
- 'features': [{'name': 'temperature',
-   'type': 'continuous',
-   'units': 'Fahrenheit',
-   'lower': 0,
-   'upper': 100,
-   'mean': 68.5},
-  {'name': 'humidity',
-   'type': 'continuous',
-   'units': 'percentage',
-   'lower': 0,
-   'upper': 100,
-   'mean': 70.0},
-  {'name': 'wind speed',
-   'type': 'continuous',
-   'units': 'miles per hour',
-   'lower': 0,
-   'upper': 100,
-   'mean': 7.5},
-  {'name': 'precipitation',
-   'type': 'categorical',
-   'categories': ['yes', 'no'],
-   'weights': [0.5, 0.5]}],
- 'target': {'possible_answers': ['Yes', 'No']},
- 'training': {'headers': ['recorded_at',
-   'temperature',
-   'humidity',
-   'wind_speed',
-   'precipitation-yes',
-   'precipitation-no',
-   'target','note'],
-  'observations': [['2023-07-16 21:17', 72.25, 64.57, 8.48, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 70.07, 65.62, 4.53, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 67.72, 70.66, 6.18, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 63.17, 71.98, 8.35, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 71.81, 66.64, 12.49, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 66.63, 71.09, 2.98, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 69.66, 68.33, 7.39, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 67.18, 70.4, 9.14, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 72.83, 70.62, 9.17, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 69.01, 69.01, 6.31, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 70.86, 63.17, 8.3, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 74.4, 68.98, 6.06, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 69.1, 73.16, 7.27, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 66.53, 68.66, 7.14, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 64.61, 71.43, 7.68, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 71.25, 75.97, 6.68, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 70.81, 78.03, 4.64, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 65.08, 68.95, 10.07, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 68.17, 73.26, 8.3, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 67.38, 69.97, 6.21, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 68.23, 68.52, 4.77, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 67.45, 70.58, 11.52, 1.0, 0.0, 'yes',''],
-   ['2023-07-16 21:17', 64.93, 71.95, 6.68, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 71.62, 73.73, 5.0, 0.0, 1.0, 'no',''],
-   ['2023-07-16 21:17', 62.95, 69.15, 6.46, 1.0, 0.0, 'yes','']]},
- 'coefficients': {'temperature': 0.2367782355450912,
-  'humidity': -0.12389795668046169,
-  'wind_speed': -0.892371546574006,
-  'precipitation-yes': 18.607187389456104,
-  'precipitation-no': -18.58496977322286,
-  'intercept': 0.0},
-  'performance': {"r-squared":0.2}}]
-
-	if (!localStorage.questions) {
-		localStorage.questions = JSON.stringify(questions)
-	}
-
-	//localStorage.questions = JSON.stringify(questions)
-
-	</script>
+	<script src="js/model_lib.js?v=2023-05-10.13:09"></script>
 	
 	<!--
 	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
-
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/abbott.min.css"></link>-->
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/abbott.min.css"></link>
+	-->
 
 </HEAD>
 
@@ -148,6 +74,7 @@
 </div>
 
 <div id="list_screen"><div id="list"></div></div>
+<div id="lib_screen"><div id="list"></div></div>
 
 <div id="new_model_screen" class="new_model_screen">
 	<div id="new_model" class="new_model">
@@ -159,7 +86,7 @@
 		<p>Maybe you'll create a sleep log and figure out when it's safe to have that last coffee or discover some feature you didn't think was important really is the best predictor of your mood but only if you take the time to explore possible features and collect lots of data. Even then, remember, correlation isn't causation; <a href="https://www.kdnuggets.com/2017/02/hill-data-scientist-xkcd-story.html" target="_blank" class="body_links">consider the context</a>. And beware, for if you torture the data long enough, it will <a href="https://en.wikipedia.org/wiki/Data_dredging" target="_blank" class="body_links">confess to anything</a>. <!--For more on model making, check out this short lecture.--></p>
 		<p>Now go ahead, make a model.</p>
 		<div class="button_container">
-			<a href="javascript:void('')" onClick="make_new();" class="button">From Library</a>
+			<a href="javascript:void('')" onClick="show_lib();" class="button">From Library</a>
 			<a href="javascript:void('')" onClick="upload_file();" class="button">From a File</a>
 			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
 		</div>
@@ -272,6 +199,10 @@
 
 <script type="text/javascript">
 
+if (!localStorage.questions) {
+	localStorage.questions = "[]";
+}
+
 function rethinkWindowSize() {
 	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px');
 	$('#features_wrapper').scrollTop(0);
@@ -363,8 +294,8 @@ function show_list() {
 		$('#list').empty();
 		i = 0;
 		for (question in JSON.parse(localStorage.questions)) {
-			$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions) [question]["question"]+`</div>`);
-			i=+ 1;
+			$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions)[question]["question"]+`</div>`);
+			i+=1;
 		}
 		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
 
@@ -374,6 +305,42 @@ function show_list() {
 		$('#run').hide();
 		$('#edit_screen').hide();
 		localStorage.screen = "list";
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+		window.scrollTo(0,0);
+	}
+}
+
+function show_lib() {
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		document.title = "Library of Toy Models";
+		$('#list').empty();
+		i = 0;
+		for (question in library) {
+			console.log(question)
+			$('#list').append(`<div class="list_item" onclick="load_lib_model(`+i+`);show_list();"><div style="float:right;height:100%;padding:0 0px 15px 15px;"><span class="plus">+</span></div>Add <b><i>`+library[question]["question"]+`</i></b> to <i>Models</i></div>`);
+			i+=1;
+		}
+		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
+
+		$('#about').hide();
+		$('#list_screen').show();
+		$('#new_model_screen').hide();
+		$('#run').hide();
+		$('#edit_screen').hide();
+		localStorage.screen = "lib";
 		$('#new_mod').show();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
@@ -489,15 +456,32 @@ function run_model(){
 }
 
 function load_model(n=0){
+	if (localStorage.questions!="[]"){
+		var question_arr = JSON.parse(localStorage.questions)
+		question_arr.unshift(question_arr.splice(n, 1)[0]);
+		localStorage.questions = JSON.stringify(question_arr)
+		question = question_arr[0]["question"]
+		$('#model_json').val(JSON.stringify(question_arr[0], null, 2))
+		//document.title = question;
+		$('#question_text').html(question);
+		$('#prediction_text').html("--<sup>&dagger;</sup>");
+		$('#n_entires').html(question_arr[0]["training"]["observations"].length);
+		$('#features_wrapper').css('top',($('#prediction').height()+40)+'px'); 
+		$('#features_wrapper').scrollTop(0);
+	}
+}
+
+function load_lib_model(n=0){
 	var question_arr = JSON.parse(localStorage.questions)
-	question_arr.unshift(question_arr.splice(n, 1)[0]);
+	question_arr.unshift(library[n]);
+	//question_arr.unshift(question_arr.splice(n, 1)[0]);
 	localStorage.questions = JSON.stringify(question_arr)
 	question = question_arr[0]["question"]
 	$('#model_json').val(JSON.stringify(question_arr[0], null, 2))
 	//document.title = question;
 	$('#question_text').html(question);
 	$('#prediction_text').html("--<sup>&dagger;</sup>");
-	$('#n_entires').html(questions[0]["training"]["observations"].length);
+	$('#n_entires').html(question_arr[0]["training"]["observations"].length);
 	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px'); 
 	$('#features_wrapper').scrollTop(0);
 }
@@ -509,10 +493,22 @@ function snake_case(text){
 	return text
 }
 
-var overwrite_mod = 0;
-function upload_file(overwrite_mod=0) {
-    overwrite_mod = overwrite_mod;
+function upload_file() {
     $("#upload:hidden").trigger('click');
+}
+
+function format_check(json){
+	var output;
+	if ((json["question"]) && 
+		(json["type"]) && 
+		(Object.keys(json["features"]).length>0) && 
+		(Object.keys(json["coefficients"]).length>1) && 
+		(!Number.isNaN(json["coefficients"]["intercept"]))) {
+		output = ""
+	} else {
+		output = "Please check your code, edit, and try again.";	
+	}
+	return output
 }
 
 //===========================================
@@ -526,16 +522,28 @@ control.addEventListener("change", function(event){
 		var reader = new FileReader();
 			reader.onload = function(event){
 				this_model = event.target.result;
-
-				//if (get_state('version')!="0.1") {
-            	//	alert("This file does not seem to be a valid v0.1 simulation file (our latest version). It may break things/not load properly. Proceed at your own risk!");
-        		//} else {
-					localStorage.questions = JSON.stringify([JSON.parse(this_model)].concat(JSON.parse(localStorage.questions)));
-					//load_state();
-					if (overwrite_mod==0){
+				try {
+					error_msg = format_check(JSON.parse(this_model));					
+				} catch (error) {
+					error_msg = "Error loading file.";
+				}
+				if (error_msg.length>0) {
+            		alert("There is a problem with this file's format. " + error_msg);
+        		} else {
+					if (localStorage.screen=="edit"){
+						let text = "Loading this file will overwrite the current model.";
+  						if (confirm(text) == true) {
+							q_arr = JSON.parse(localStorage.questions);
+							q_arr[0] = JSON.parse(this_model)
+							localStorage.questions = JSON.stringify(q_arr);
+							load_model();
+							show_edit();
+						}
+					} else {
+						localStorage.questions = JSON.stringify([JSON.parse(this_model)].concat(JSON.parse(localStorage.questions)));
 						show_list();
-					} 
-				//}
+					}
+				}
 
 			};
 			reader.onerror = function(event){
@@ -601,6 +609,8 @@ function load_page() {
 	load_model();
 	if (localStorage.screen=="list") {
 		show_list();
+	} else if (localStorage.screen=="lib") {
+		show_lib();
 	} else if (localStorage.screen=="new") {
 		make_new();
 	} else if (localStorage.screen=="run") {
@@ -628,9 +638,15 @@ $(window).bind('beforeunload', function(){
 
 function save_changes() {
 	var question_arr = JSON.parse(localStorage.questions);
-	question_arr[0] = JSON.parse($('#model_json').val());
-	localStorage.questions = JSON.stringify(question_arr);
-	changes = 0;
+	active_json = JSON.parse($('#model_json').val());
+	error_msg = format_check(active_json);
+	if (error_msg.length==0) {
+		question_arr[0] = active_json;
+		localStorage.questions = JSON.stringify(question_arr);
+		changes = 0;
+	} else {
+		alert("There was an issue with your json format. No changes have been saved. " + error_msg)
+	}
 }
 
 </script>
@@ -645,11 +661,11 @@ function save_changes() {
 		X what if list is empty (deleted everything) check behavior
 	X Save changes
 	X prompt to save before leaving edit page if change
-	- [NEW SCREEN] from library
-	- Check for valid format (add to save and load)
-	- load into existing or add new
-	- add save check to upload ???
-	- figure out what you are downloading when in edit (saved or written)
+	X add from library
+	X Check for valid format (add to save and load)
+	X load into existing or add new
+	X add save check to upload
+	X figure out what you are downloading when in edit (saved or written)
 	- dynamicly build run model page from json
 	- log ground truth functionality (upload status)
 	- save feature values to storage before ground truth (save state)
