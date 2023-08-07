@@ -2,28 +2,39 @@ library = [
 
     {'question': 'Will it rain tomorrow?',
     'type': 'categorical',
-    'features': [{'name': 'temperature',
-    'type': 'continuous',
-    'units': 'Fahrenheit',
-    'lower': 0,
-    'upper': 100,
-    'mean': 68.5},
-    {'name': 'humidity',
-    'type': 'continuous',
-    'units': 'percentage',
-    'lower': 0,
-    'upper': 100,
-    'mean': 70.0},
-    {'name': 'wind speed',
-    'type': 'continuous',
-    'units': 'miles per hour',
-    'lower': 0,
-    'upper': 100,
-    'mean': 7.5},
-    {'name': 'precipitation',
-    'type': 'categorical',
-    'categories': ['yes', 'no'],
-    'weights': [0.5, 0.5]}],
+    'features': [
+                    {
+                        'name': 'temperature',
+                        'description':'more detail',
+                        'type': 'continuous',
+                        'units': 'Fahrenheit',
+                        'lower': 0,
+                        'upper': 100,
+                        'mean': 68.5
+                    },
+                    {
+                        'name': 'humidity',
+                        'type': 'continuous',
+                        'units': 'percentage',
+                        'lower': 0,
+                        'upper': 100,
+                        'mean': 70.0
+                    },
+                    {
+                        'name': 'wind speed',
+                        'type': 'continuous',
+                        'units': 'miles per hour',
+                        'lower': 0,
+                        'upper': 100,
+                        'mean': 7.5
+                    },
+                    {
+                        'name': 'precipitation',
+                        'type': 'categorical',
+                        'categories': ['yes', 'no'],
+                        'weights': [0.5, 0.5]
+                    }
+                ],
     'target': {'possible_answers': ['Yes', 'No']},
     'training': {'headers': ['recorded_at',
     'temperature',
