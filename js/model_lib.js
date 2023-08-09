@@ -36,7 +36,7 @@ library = [
                     }
                 ],
     'target': {'possible_answers': ['Yes', 'No']},
-    'training': {'headers': ['recorded_at',
+    'training': {'headers': ['recorded_on',
     'temperature',
     'humidity',
     'wind_speed',
@@ -101,7 +101,7 @@ library = [
     'categories': ['yes', 'no'],
     'weights': [0.5, 0.5]}],
     'target': {'possible_answers': ['Yes', 'No']},
-    'training': {'headers': ['recorded_at',
+    'training': {'headers': ['recorded_on',
     'temperature',
     'humidity',
     'wind_speed',

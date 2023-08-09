@@ -106,6 +106,7 @@
 	</div>
 </div>
 
+<div id="ground_truth_screen" class="ground_truth_screen"></div>
 
 <div id="edit_screen" class="edit_screen">
 	<div id="edit" class="edit">
@@ -211,6 +212,7 @@ function show_about(){
 		$('#list_screen').hide();
 		$('#new_model_screen').hide();
 		$('#run').hide();
+		$('#ground_truth_screen').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "about";
 		$('#new_mod').show();
@@ -237,7 +239,7 @@ function show_list() {
 		$('#list').empty();
 		i = 0;
 		for (question in JSON.parse(localStorage.questions)) {
-			$('#list').append(`<div class="list_item" onclick="load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions)[question]["question"]+`</div>`);
+			$('#list').append(`<div class="list_item" onclick="localStorage.removeItem('feature_values');load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions)[question]["question"]+`</div>`);
 			i+=1;
 		}
 		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
@@ -246,9 +248,10 @@ function show_list() {
 		$('#list_screen').show();
 		$('#new_model_screen').hide();
 		$('#run').hide();
+		$('#ground_truth_screen').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "list";
-		$('#new_mod').show();
+		$('#new_mod').hide();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
@@ -282,9 +285,10 @@ function show_lib() {
 		$('#list_screen').show();
 		$('#new_model_screen').hide();
 		$('#run').hide();
+		$('#ground_truth_screen').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "lib";
-		$('#new_mod').show();
+		$('#new_mod').hide();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
@@ -309,6 +313,7 @@ function make_new() {
 		$('#list_screen').hide();
 		$('#new_model_screen').show();
 		$('#run').hide();
+		$('#ground_truth_screen').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "new";
 		$('#new_mod').hide();
@@ -323,61 +328,122 @@ function make_new() {
 
 function show_model() {
 
-	features = JSON.parse(localStorage.questions)[0]["features"]
+	model = JSON.parse(localStorage.questions)[0]
+	features = model["features"];
+	feature_list = features.map(features => snake_case(features.name));
+	feature_list.push("note");
+	coefficients = model["coefficients"];
+
+	if ( (localStorage.feature_values) && (feature_list.sort().join('/')==Object.keys(JSON.parse(localStorage.feature_values)).sort().join('/')) ) {
+		feature_values = JSON.parse(localStorage.feature_values);
+		console.log("loading saved feature values: ",feature_values)
+	} else {
+		var feature_values = {"note":""};
+		for (feature in feature_list) {
+			features.forEach((element,index) => {
+				if (feature_list[feature]==snake_case(element["name"])) {
+					if (element["type"]=="continuous") {
+						feature_values[snake_case(feature_list[feature])] = element["mean"];
+					} else if (element["type"]=="categorical") {
+						feature_values[snake_case(feature_list[feature])] = element["categories"][ element["weights"].indexOf(Math.max(...element["weights"])) ];
+					}
+				}
+			})
+		}
+		localStorage.feature_values = JSON.stringify(feature_values);
+		console.log("loading default feature values: ",feature_values)
+	}
+
 	html = '<h2>Inputs/Features</h2>';
 	features.forEach((element,index) => {
-			html += `<div class="feature">
-				<b>`+(index+1)+`) `+element["name"]+`:</b>	<span id="`+snake_case(element["name"])+`">`+element["mean"]+`</span> (<span id="`+snake_case(element["name"])+`_units">`+element["units"]+`</span>)
-				<p>`
-			
-				if (element["type"]=="continuous") {
-					html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+element["mean"]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();">`;
-				} else if (element["type"]=="categorical") {
-					html += `<select id="precipitation" class="select" oninput="run_model();">
-						<option>Yes</option>
-						<option>No</option>
-					<select>`;
+			html += `<div class="feature">`;
+			if (element["type"]=="continuous") {
+				html += `<b>`+(index+1)+`) `+element["name"]+`:</b>	<span id="`+snake_case(element["name"])+`">`+feature_values[snake_case(element["name"])]+`</span> (<span id="`+snake_case(element["name"])+`_units">`+element["units"]+`</span>)<p>`;
+				html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+feature_values[snake_case(element["name"])]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();">`;
+			} else if (element["type"]=="categorical") {
+				html += `<b>`+(index+1)+`) `+element["name"]+`:</b><p>`;			
+				html += `<select id="`+snake_case(element["name"])+`" class="select" oninput="run_model();">`;
+					for (cat in element["categories"]) {
+						html += `<option value="`+element["categories"][cat]+`"`;
+						if (element["categories"][cat]==feature_values[element["name"]]) {
+							html += ` selected`;
+						}
+						feature_values[element["name"]]
+						html += `>`+element["categories"][cat]+`</option>`;
 					}
-
+				html += `<select>`;
+			}
 			html += `</p>
 			</div>`;
-
-			//element["name"]);
 	})
-
-
 
 	html += `<!-- Check for change to notes and features and make sure folks know when they will be lost-->
 			<p><b>NOTE (optional):</b></p>
 			<p>
-				<textarea id="note" style="width:100%;height:70px"></textarea></p>
+				<textarea id="note" style="width:100%;height:70px" oninput="tmp=JSON.parse(localStorage.feature_values);tmp['note']=this.value;localStorage.feature_values = JSON.stringify(tmp);">`+feature_values["note"]+`</textarea></p>
 			<p>
-				<a href="" class="button" style="margin-bottom: 20px;">Log Ground Truth</a>
+				<a href="javascript:void('')" onClick="ground_truth();" class="button" style="margin-bottom: 20px;">Log Ground Truth</a>
 			</p>
 			<p>
 				<sup>&dagger;</sup>
 				Here's the regression behind this prediction:
 
-				<div id="regression" class="regression">
-		\\[p(x) = {{1} \\over {1 + e^{-1(B_0 + x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1+ x_1*B_1)}}}\\]
-				</div>
+				<div id="regression" class="regression">`
+
+	model_html = ``
+	if (model["type"]=="continuous") {
+		model_html += `\\[y = B_0`;
+	} else if (model["type"]=="categorical") {
+		model_html += `\\[p(x) = {{1} \\over {1 + e^{-1(B_0`
+	}	
+	
+	given_html = ``;
+	if (model["type"]=="continuous") {
+		given_html += `<li>\\(y\\) is the predicted value of your answer</li>`;
+	} else if (model["type"]=="categorical") {
+		given_html += `<li>\\(p(x)\\) is the probability the answer is <i>Yes</i></li>`;
+	}
+	given_html += `<li>\\(B_0\\) is the <i>intercept</i> with value =`+Math.round(coefficients["intercept"]*100)/100+`</li>`;
+
+	var i = 1;
+	features.forEach((element,index) => {
+		if (element["type"]=="continuous") {
+			variable_name = snake_case(element["name"]);
+			given_html += `<li>\\(x_`+i+`\\) is <i>`+variable_name+`</i> measured in <i>`+element["units"]+`</i></li> `;
+			given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+			model_html += `+ x_`+i+`*B_`+i;
+			i += 1;
+		} else if (element["type"]=="categorical") {
+			for (cat in element["categories"]) {
+				variable_name = snake_case(element["name"])+`-`+snake_case(element["categories"][cat]);
+				given_html += `<li>\\(x_`+i+`\\) is the binary variable <i>`+variable_name+`</i>`;
+				given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+				model_html += `+ x_`+i+`*B_`+i;
+				i += 1;
+			}
+		}
+	})
+
+	if (model["type"]=="continuous") {
+		model_html += `\\]`;
+	} else if (model["type"]=="categorical") {
+		model_html += `)}}}\\]`;		
+	}	
+
+	html += model_html + `</div>
 
 				Where:
-				<ul>
-					<li>\\(p(x)\\) is the probability the answer is <i>Yes</i></li> 
-					<li>\\(B_0\\) is the <i>intercept</i></li> 
-					<li>\\(x_1\\) is <i>temperature</i> in <i>Farenheight</i></li> 
-					<li>\\(B_1\\) is a coefficient with value = -2.909078</li> 
-				</ul>
+				<ul>`;
+	html += given_html + `</ul>`;
 
-				<p>Curent Model Performance:<sup>*</sup></p>
-				<ul>
-					<li><a href="" target="_blank" class="body_links">R-squared</a> = 0.5</li>
-					<li><a href="" target="_blank" class="body_links">accuracey</a> = 0.5</li>
-				</ul>
-				<sup>*</sup>Arrived at using k-folds 
-			</p>
-		</div>`;
+	html_ondex = `<p>Curent Model Performance:<sup>*</sup></p>
+			<ul>
+				<li><a href="" target="_blank" class="body_links">R-squared</a> = 0.5</li>
+				<li><a href="" target="_blank" class="body_links">accuracey</a> = 0.5</li>
+			</ul>
+			<sup>*</sup>Arrived at using k-folds 
+		</p>
+	</div>`;
 
 	$('#features').empty();
 	$('#features').append(html);
@@ -400,9 +466,10 @@ function show_model() {
 		$('#list_screen').hide();
 		$('#new_model_screen').hide();
 		$('#run').show();
+		$('#ground_truth_screen').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "run";
-		$('#new_mod').show();
+		$('#new_mod').hide();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
@@ -413,12 +480,138 @@ function show_model() {
 	}
 }
 
+function ground_truth() {
+
+	model = JSON.parse(localStorage.questions)[0]
+
+	$('#ground_truth_screen').empty();
+	html = "<h2>Log Ground Truth</h2>"
+	html += "<p>Input and record the outcome/target value for the observations made on the last screen.</p><p>"
+
+	if (model["type"]=="continuous"){
+		html += `<input name="target" id="target" type="number" style="width:100%"/>`;
+	} else if (model["type"]=="categorical"){
+		html += `<select id="target" style="width:100%">`;
+		for (x in model["target"]["possible_answers"]) {
+			html += `<option>`+model["target"]["possible_answers"][x]+`</option>`;
+		}
+		html += `</select>`;
+	}
+
+	html += `</p><p><a href="javascript:void('')" onClick="save_obs();" class="button" style="margin-bottom: 20px;">Save Observation</a></p>`
+
+	$('#ground_truth_screen').append(html);
+
+	setTimeout(function(){
+    	$('#target').focus();
+	});
+
+	$('#about').hide();
+	$('#list_screen').hide();
+	$('#new_model_screen').hide();
+	$('#run').hide();
+	$('#ground_truth_screen').show();	
+	$('#edit_screen').hide();
+	localStorage.screen = "run";
+	$('#new_mod').hide();
+	$('#upload_link').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').hide();
+
+}
+
+
+function save_obs() {
+
+	models = JSON.parse(localStorage.questions)
+	model = models[0]
+	headers = model["training"]["headers"]
+	feature_values = JSON.parse(localStorage.feature_values);
+	feature_values["recorded_on"] = new Date().toISOString().split('T')[0];
+	feature_values["target"] = $('#target').val();
+
+	row = []
+	for (column in headers) {
+		if (!headers[column].includes("-")) {
+			row.push(feature_values[headers[column]])
+		} else {
+			if (headers[column].split("-")[1]==feature_values[headers[column].split("-")[0]]) {
+				row.push(1)
+			} else {
+				row.push(0)
+			}
+		}
+	}
+	
+	console.log("saving ground truth")
+	console.log(headers)
+	console.log(row)
+
+	model["training"]["observations"].push(row) 
+	models[0] = model
+	localStorage.questions = JSON.stringify(models);
+
+	localStorage.removeItem('feature_values');
+
+	load_model();
+	show_model();
+}
+
+
+function run_model(){
+	
+	feature_values = JSON.parse(localStorage.feature_values);
+	model = JSON.parse(localStorage.questions)[0]
+	equation = "";
+	output = 0;
+	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
+	for (const [key, value] of Object.entries(coefficients)) {
+		if (key=="intercept") {
+			//console.log(String(key)+value);
+			output += value
+			equation += String(value)
+		} else if (!key.includes("-")) {
+			//console.log(String(key)+($('#'+key).html())*value*1);
+			output += ($('#'+key).html())*value*1
+			equation += "("+String(($('#'+key).html()))+")("+String(value)+") + ";
+			feature_values[key] = $('#'+key).html()*1
+		} else {
+			if ($('#'+key.split("-")[0]).val().toLowerCase()==key.split("-")[1].toLowerCase()) {
+				output += 1*value
+				equation += "(1)("+String(value)+") + "
+			} else {
+				output += 0
+				equation += "(0)("+String(value)+") + "
+			}
+			feature_values[key.split("-")[0]] = $('#'+key.split("-")[0]).val();
+		}
+	}
+	feature_values["note"] = $('#note').val();
+	
+	if (model["type"]=="continuous") {
+		output = output;
+		equation = String(output) + " = "  + equation;
+	} else if (model["type"]=="categorical") {
+		output = 100 / (1 + Math.E**(-1*output));
+		equation = String(output) + " = (100)(1 /(1 + e^(-("  + equation + "))))";
+	}	
+
+	localStorage.feature_values = JSON.stringify(feature_values);
+
+	//console.log(equation);
+	output = Math.round(output*100)/100;
+	$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+}
+
+
 function show_edit() {
 	document.title = "Edit: "+JSON.parse(localStorage.questions)[0]["question"];
 	$('#about').hide();
 	$('#list_screen').hide();
 	$('#new_model_screen').hide();
 	$('#run').hide();
+	$('#ground_truth_screen').hide();	
 	$('#edit_screen').show();
 	localStorage.screen = "edit";
 	$('#new_mod').show();
@@ -431,35 +624,6 @@ function show_edit() {
 	$('#model_json').scrollTop(0); 
 }
 
-function run_model(){
-	var equation = "";
-	output = 0;
-	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
-	for (const [key, value] of Object.entries(coefficients)) {
-		if (key=="intercept") {
-			//console.log(String(key)+value);
-			output += value
-			equation += String(value)
-		} else if (!key.includes("-")) {
-			//console.log(String(key)+($('#'+key).html())*value*1);
-			output += ($('#'+key).html())*value*1
-			equation += "("+String(($('#'+key).html()))+")("+String(value)+") + "
-		} else {
-			if ($('#'+key.split("-")[0]).val().toLowerCase()==key.split("-")[1].toLowerCase()) {
-				output += 1*value
-				equation += "(1)("+String(value)+") + "
-			} else {
-				output += 0
-				equation += "(0)("+String(value)+") + "
-			}
-		}
-	}
-	output = 100 / (1 + Math.E**(-1*output));
-	equation = String(output) + " = (100)(1 /(1 + e^(-("  + equation + "))))";
-	console.log(equation);
-	output = Math.round(output*100)/100;
-	$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
-}
 
 function load_model(n=0){
 	if (localStorage.questions!="[]"){
@@ -576,6 +740,7 @@ $('#reply').keypress(function(e){
 function delete_mod(n) {
   let text = "Press OK to delete this model and its data or Cancel to do nothing.";
   if (confirm(text) == true) {
+	localStorage.removeItem("feature_values"); 
 	var question_arr =  JSON.parse(localStorage.questions)
 	var tmp = question_arr.shift();
 	localStorage.questions = JSON.stringify(question_arr);
@@ -672,12 +837,12 @@ function save_changes() {
 	X load into existing or add new
 	X add save check to upload
 	X figure out what you are downloading when in edit (saved or written)
-	- dynamicly build run model page from json
-	- save feature values to storage before ground truth (save state)
-	- log ground truth functionality (upload status)
+	X dynamicly build run model page from json
+	X save feature values to storage before ground truth (save state)
+	X log ground truth functionality (upload status)
+	- [NEW SCREEN] terms
 	- [NEW SCREEN] build new page functionality
 	- [NEW SCREEN] add training feature
-	- [NEW SCREEN] terms
 
 	- add interaction terms
 	- add exclude terms list
