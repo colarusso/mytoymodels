@@ -138,7 +138,7 @@
 <div id="footer" class="footer">
 	<a id="about" href="javascript:void('');" onClick="show_about();">About</a> | 
 	<a id="tos" href="javascript:void('')" onClick="show_tos()">Terms</a> | 
-	<a id="feedback" href="https://forms.gle/" target="_blank">Feedback</a>
+	<a id="feedback" href="https://docs.google.com/forms/d/e/1FAIpQLSfNN9v_A_wtILTMKuHIKFcRmMrq3CQSC1qgMZYCIlTGdBJnmA/viewform" target="_blank">Feedback</a>
 	<span style="float: right;"><a id="mode" href="javascript:void('')" onClick="dark_mode(1)" style="text-decoration: none;">🌗</a></span>
 </div>
 
@@ -201,6 +201,7 @@ function dark_mode(change=null){
 }
 
 function show_about(){
+	console.log("Show About Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -235,6 +236,7 @@ function show_about(){
 }
 
 function show_tos(){
+	console.log("Show ToS Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -270,6 +272,7 @@ function show_tos(){
 
 
 function show_list() {
+	console.log("Show List Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -314,6 +317,7 @@ function show_list() {
 }
 
 function show_lib() {
+	console.log("Show Library Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -356,6 +360,7 @@ function show_lib() {
 }
 
 function make_new() {
+	console.log("Show Make New Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -391,6 +396,7 @@ function make_new() {
 
 
 function show_build(){
+	console.log("Show Build New Screen")
 	var go = 1;
 	if (changes==1) {
 		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
@@ -426,6 +432,7 @@ function show_build(){
 
 
 function show_model() {
+	console.log("Show Model Screen")
 
 	model = JSON.parse(localStorage.questions)[0]
 	features = model["features"];
@@ -435,7 +442,7 @@ function show_model() {
 
 	if ( (localStorage.feature_values) && (feature_list.sort().join('/')==Object.keys(JSON.parse(localStorage.feature_values)).sort().join('/')) ) {
 		feature_values = JSON.parse(localStorage.feature_values);
-		console.log("loading saved feature values: ",feature_values)
+		console.log("Load saved feature values: ",feature_values)
 	} else {
 		var feature_values = {"note":""};
 		for (feature in feature_list) {
@@ -450,7 +457,7 @@ function show_model() {
 			})
 		}
 		localStorage.feature_values = JSON.stringify(feature_values);
-		console.log("loading default feature values: ",feature_values)
+		console.log("Load default feature values: ",feature_values)
 	}
 
 	html = '<h2>Inputs/Features</h2>';
@@ -502,21 +509,24 @@ function show_model() {
 	} else if (model["type"]=="categorical") {
 		given_html += `<li>\\(p(x)\\) is the probability the answer is <i>Yes</i></li>`;
 	}
-	given_html += `<li>\\(B_0\\) is the <i>intercept</i> with value =`+Math.round(coefficients["intercept"]*100)/100+`</li>`;
+	//given_html += `<li>\\(B_0\\) is the <i>intercept</i> with value = `+Math.round(coefficients["intercept"]*100)/100+`</li>`;
+	given_html += `<li>\\(B_0\\) is the <i>intercept</i> with value = `+coefficients["intercept"].toExponential(2)+`</li>`;
 
 	var i = 1;
 	features.forEach((element,index) => {
 		if (element["type"]=="continuous") {
 			variable_name = snake_case(element["name"]);
 			given_html += `<li>\\(x_`+i+`\\) is <i>`+variable_name+`</i> measured in <i>`+element["units"]+`</i></li> `;
-			given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+			//given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+			given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+coefficients[variable_name].toExponential(2)+`</i></li> `;
 			model_html += `+ x_`+i+`*B_`+i;
 			i += 1;
 		} else if (element["type"]=="categorical") {
 			for (cat in element["categories"]) {
 				variable_name = snake_case(element["name"])+`-`+snake_case(element["categories"][cat]);
 				given_html += `<li>\\(x_`+i+`\\) is the binary variable <i>`+variable_name+`</i>`;
-				given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+				//given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+Math.round(coefficients[variable_name]*100)/100+`</i></li> `;
+				given_html += `<li>\\(B_`+i+`\\) is a coefficient with value <i>`+coefficients[variable_name].toExponential(2)+`</i></li> `;
 				model_html += `+ x_`+i+`*B_`+i;
 				i += 1;
 			}
@@ -559,7 +569,7 @@ function show_model() {
 	}
 	if (go==1) {
 		changes = 0;
-		load_model();
+		//load_model();
 		document.title = "Model: "+JSON.parse(localStorage.questions)[0]["question"];
 		$('#about').hide();
 		$('#tos').hide();
@@ -586,6 +596,7 @@ function show_model() {
 }
 
 function ground_truth() {
+	console.log("Show Log Ground Truth Screen")
 
 	model = JSON.parse(localStorage.questions)[0]
 
@@ -635,6 +646,7 @@ function ground_truth() {
 }
 
 function save_obs(mode=1) {
+	console.log("Save Observations")
 
 	models = JSON.parse(localStorage.questions)
 	model = models[0]
@@ -656,8 +668,9 @@ function save_obs(mode=1) {
 		}
 	}
 	
-	console.log("saving ground truth")
-	console.log(headers)
+	console.log("Saving ground truth...")
+	console.log("Headers: "+headers.join(","))
+	console.log("Values: ")
 	console.log(row)
 
 	model["training"]["observations"].push(row) 
@@ -666,13 +679,14 @@ function save_obs(mode=1) {
 
 	localStorage.removeItem('feature_values');
 
-	if (mode=1) {
+	if (mode==1) {
 		load_model();
 		show_model();
 	}
 }
 
 function save_and_train(mode=0) {
+	console.log("Save and Train")
 
 	save_changes();
 
@@ -707,9 +721,9 @@ function save_and_train(mode=0) {
 
 	setTimeout(function(){
 		if (!passed) {
-			alert("Unable to build model! Your observations have been saved, but more data is needed. Add more and try again.")
+			alert("Unable to build model! Any observations have been saved, but more data is needed. Add more and try again.")
 		}
-		save_obs(0);
+		save_changes();
 		load_model();
 		if (mode==0) {
 			show_model();
@@ -721,6 +735,7 @@ function save_and_train(mode=0) {
 }
 
 function run_model(){
+	console.log("Run/Update Model")
 	
 	feature_values = JSON.parse(localStorage.feature_values);
 	model = JSON.parse(localStorage.questions)[0]
@@ -762,11 +777,17 @@ function run_model(){
 
 	//console.log(equation);
 	output = Math.round(output*100)/100;
-	$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+	if (model["type"]=="continuous") {
+		$('#prediction_text').html(output+"<sup>&dagger;</sup>");
+	} else if (model["type"]=="categorical") {
+		$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+	}
 }
 
 
 function show_edit() {
+	console.log("Show Edit Screen")
+
 	document.title = "Edit: "+JSON.parse(localStorage.questions)[0]["question"];
 	$('#about').hide();
 	$('#tos').hide();
@@ -789,10 +810,14 @@ function show_edit() {
 	dark_mode();
 	window.scrollTo(0,0);
 	$('#model_json').scrollTop(0); 
+
+	check_wrap();
 }
 
 
 function load_model(n=0){
+	console.log("Load Model")
+
 	if (localStorage.questions!="[]"){
 		var question_arr = JSON.parse(localStorage.questions)
 		question_arr.unshift(question_arr.splice(n, 1)[0]);
@@ -813,6 +838,8 @@ function load_model(n=0){
 }
 
 function load_lib_model(n=0){
+	console.log("Add Library Model to My Models")
+
 	var question_arr = JSON.parse(localStorage.questions)
 	question_arr.unshift(library[n]);
 	//question_arr.unshift(question_arr.splice(n, 1)[0]);
@@ -839,10 +866,12 @@ function snake_case(text){
 }
 
 function upload_file() {
+	console.log("Upload File")
     $("#upload:hidden").trigger('click');
 }
 
 function format_check(json){
+	console.log("Check JSON format")
 	var output;
 	if ((json["question"]) && 
 		(json["type"]) && 
@@ -857,6 +886,7 @@ function format_check(json){
 }
 
 function mem_limit() {
+	console.log("Find Memory Limit")
 	if (localStorage && !localStorage.getItem('mem_limit')) {
 		var i = 0;
 		try {
@@ -868,12 +898,17 @@ function mem_limit() {
 			localStorage.removeItem('mem_test');
 			localStorage.setItem('mem_limit', i - 250);            
 		}
+		return true
+	} else {
+		return false
 	}
 }
 
 function mem_usage() {
-	console.log("MEMORY REPORT")
-	mem_limit();
+	new_check = mem_limit();
+	if (new_check) {
+		console.log("MEMORY REPORT");
+	}
 	var _lsTotal = 0,
     _xLen, _x;
 	for (_x in localStorage) {
@@ -882,21 +917,21 @@ function mem_usage() {
 		}
 		_xLen = ((localStorage[_x].length + _x.length) * 2);
 		_lsTotal += _xLen;
-		console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+		if (new_check) {
+			console.log(" - " + _x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+		}
 	};
 	kbs = (_lsTotal / 1024).toFixed(2)
-	console.log("Total = " + kbs + " KB");
-	percentage = (_lsTotal / 1024).toFixed(2)/localStorage.mem_limit
-	console.log("Limit = " + localStorage.mem_limit + " KB");
-	console.log("Pecentage = " + percentage);
+	percentage = (_lsTotal / 1024).toFixed(2)/localStorage.mem_limit	
+	console.log("Memory Check: " + Math.round(percentage*10000)/100 + "% (" + kbs + "KB/" + localStorage.mem_limit + "KB)");
 
 	if (percentage>=0.4) {
 		alert('Your model library is taking up '+ kbs + " KB. Consider saving some of your data to file(s) and deleting them from here to free up space.")
 	}
-	//return percentage
 }
 
 function arr2csv(){
+	console.log("Convert Array to CSV")
 	csv = JSON.parse(localStorage.questions)[0]["training"]["observations"] 
 	csv.unshift(JSON.parse(localStorage.questions)[0]["training"]["headers"])
 
@@ -974,6 +1009,7 @@ $('#reply').keypress(function(e){
 });
 
 function delete_mod(n) {
+  console.log("Delete Model")
   let text = "Press OK to delete this model and its data or Cancel to do nothing.";
   if (confirm(text) == true) {
 	localStorage.removeItem("feature_values"); 
@@ -985,6 +1021,7 @@ function delete_mod(n) {
 }
 
 function check_wrap(){
+	console.log("Check Word Wrap")
 	if (localStorage.word_wrap == 1) {
 		$( "#wrap" ).prop( "checked", true );
 		document.getElementById('model_json').wrap = "soft";
@@ -995,6 +1032,7 @@ function check_wrap(){
 
 // toggle wrap 
 function toggle_wrap(value) {
+	console.log("Toggle Word Warp")
 	if (document.getElementById('wrap').checked) {
 		document.getElementById('model_json').wrap = "soft";
 		localStorage.word_wrap = 1;
@@ -1013,6 +1051,7 @@ function toggle_wrap(value) {
 //});
 
 function load_page() {
+	console.log("Load Screen")
 	load_model();
 	
 	if (localStorage.screen=="list") {
@@ -1028,7 +1067,6 @@ function load_page() {
 	} else {
 		show_about();
 	}
-	check_wrap();
 
 	setTimeout(function(){
 			mem_usage();
@@ -1049,6 +1087,7 @@ $(window).bind('beforeunload', function(){
 });
 
 function save_changes() {
+	console.log("Save Model")
 	try {
 		var question_arr = JSON.parse(localStorage.questions);
 		active_json = JSON.parse($('#model_json').val());
@@ -1066,13 +1105,14 @@ function save_changes() {
 }
 
 function wrangle() {
+	console.log("Wrangle Observation Data")
 	data = JSON.parse(localStorage.questions)[0]["training"]["observations"] 
 	//data.unshift(JSON.parse(localStorage.questions)[0]["training"]["headers"])
 	var removeIndexes = [0,data[0].length-1]
 	data = data.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
 	for(var i=0; i<data.length; i++){
 		row = data[i]
-		j = row.length-1
+		j = row.length-1;
 		if (row[j].toLowerCase()=="yes") {
 			data[i][j] = 1;
 		} else if (row[j].toLowerCase()=="no") {
@@ -1084,14 +1124,17 @@ function wrangle() {
 
 
 function train_model(mode=0){
+	console.log("Train Model")
 
 	models = JSON.parse(localStorage.questions)
 	this_model = models[0]
 
 	data = wrangle();
 	
-	console.log(this_model["type"])
+	console.log("Type: "+this_model["type"])
 	console.log(data)
+
+	// https://github.com/chen0040/js-regression
 
 	if (this_model["type"]=="continuous") {
 		console.log("Linear Regressions")
@@ -1163,10 +1206,11 @@ function train_model(mode=0){
 	X save feature values to storage before ground truth (save state)
 	X log ground truth functionality (upload status)
 	X add size limit warnings
-	- [NEW SCREEN] terms
+	X [NEW SCREEN] terms
 	- [NEW SCREEN] build new page functionality
-	- add training feature
+	X add training feature
 
+	- set increments on ranges 
 	- add interaction terms
 	- add exclude terms list
 

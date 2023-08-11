@@ -75,7 +75,7 @@ library = [
     'precipitation-yes': 18.607187389456104,
     'precipitation-no': -18.58496977322286,
     'intercept': 0.0},
-    'performance': {"r-squared":0.2}}
+    'performance': {}}
 
     ,{'question': 'How long with this email take?',
     'type': 'categorical',
@@ -140,5 +140,5 @@ library = [
     'precipitation-yes': 18.607187389456104,
     'precipitation-no': -18.58496977322286,
     'intercept': 0.0},
-    'performance': {"r-squared":0.2}}
+    'performance': {}}
 ]
