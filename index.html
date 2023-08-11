@@ -15,25 +15,24 @@
 	<meta property="og:description" content="\"You are standing in a courtroom...\" Develop your practice skills and test your mettle in these emersive text-based simulations from Suffolk University Law School's Legal Innovation & Technology Lab. Choose a simulation from the list below, or open a file above. Content Warning: These simulations explore the US criminal justice system. They are intended for a mature audiance and may include depictions of desturbing behavior—including drug use, sexual violence, and racism. User discretion is advised."/>
 	<meta property="og:image" content="images/thefuture.png"/>
 
+
+	
 	<link rel="stylesheet" type="text/css" href="css/main.css?v=2023-05-10.13:09">
+	<link rel="stylesheet" type="text/css" href="css/spin.css?v=2023-05-10.13:09">
 
 	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script>
-		if ((window.location.protocol == "https:") | (window.location.protocol == "http:")) {
-		  var server = "https://tools.suffolklitlab.org"; // Production Server
-		} else {
-		  var server = "http://127.0.0.1:10012"; // Local Testing Server
-		}
-	</script>
-
+	
+	<script type="module" src="https://findmycite.org/js/spin.min.js"></script>
+	<script src="js/interactions.js?v=2023-05-10.13:09"></script>
+	
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 	<script id="MathJax-script" async
-			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-	<script src="js/spin.min.js"></script>
-	<script src="js/interactions.js?v=2023-05-10.13:09"></script>
 	<script src="js/model_lib.js?v=2023-05-10.13:09"></script>
-	
+
+	<script src="https://rawgit.com/chen0040/js-regression/master/build/jsregression.min.js" type="application/javascript"></script>
+
 	<!--
 	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
@@ -44,7 +43,7 @@
 
 <BODY BGCOLOR="#ffffff" BACKGROUND="" MARGINWIDTH="0" MARGINHEIGHT="0">
 <div id="menu_bar" class="menu_bar">
-  <a href="javascript:void('');" onClick="show_list();">Models</a>
+  <a id="models_link" href="javascript:void('');" onClick="show_list();">Models</a>
   <input id="upload" type="file"/> 
   &nbsp;&nbsp;<a id="new_mod" href="javascript:void('');" onClick="load_state(1);make_new();">New</a>
   &nbsp;&nbsp;<a id="upload_link" href="javascript:void('');" onClick="upload_file(1);">Load</a>
@@ -65,7 +64,7 @@
 	</p>
 	<p>I haven't embedded analytics or tracking here, and all your data stays on your device/ My hope is this will free you to experiment honestly. But it means I don't know if folks are even using this tool unless they tell me. So, I'd apprechiate you telling what you're up to. You can find me <a href="" target="_blank">@Colarusso@mastodon.social</a> or use <a href="" target="_blank">this feedback form</a>. Want to look at the code? Check out <a href="" target="_blank">this GitHub repo</a>.</p>
 
-	<p><a href="" target="_blank">the documentation</a></p>
+	<p><a href="https://github.com/colarusso/mytoymodels#documenation" target="_blank" class="body_links">the documentation</a></p>
 
 	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 	<div class="button_container">
@@ -73,6 +72,7 @@
 	</div>
 </div>
 
+<div id="tos" class="tos"><h2>Terms of Service</h2></div>
 <div id="list_screen"><div id="list"></div></div>
 <div id="lib_screen"><div id="list"></div></div>
 
@@ -88,17 +88,19 @@
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="show_lib();" class="button">From Library</a>
 			<a href="javascript:void('')" onClick="upload_file();" class="button">From a File</a>
-			<a href="javascript:void('')" onClick="make_new();" class="button">From Scratch</a>
+			<a href="javascript:void('')" onClick="show_build();" class="button">From Scratch</a>
 		</div>
 	</div>
 </div>
+
+<div id="build_new" class="build_new"><h2>Build New</h2></div>
 
 <div id="run">
 	<div id="prediction" class="prediction">
 		<h1 id="question_text">Loading...</h1>
 		<h2 id="prediction_text">--</h2>
 		<p>
-			Based on <span id="n_entires"><i>n</i></span> <a href="javascript:void('');" onClick="alert('download csv')">observations</a>
+			Based on <span id="n_entires"><i>n</i></span> <a href="javascript:void('');" onClick="arr2csv()">observations</a>
 		</p>
 	</div>
 	<div id="features_wrapper">  
@@ -107,22 +109,23 @@
 </div>
 
 <div id="ground_truth_screen" class="ground_truth_screen"></div>
+<div id="training" class="training"><span id="spinner_here">&nbsp;</span></div>
 
 <div id="edit_screen" class="edit_screen">
 	<div id="edit" class="edit">
 		<p>
-			You can experiemnt with edits to your model below or read <a href="javascript:void('');" target="_blank" class="body_links">the documentation</a>.<sup>&dagger;</sup>
+			You can experiemnt with edits to your model below or read <a href="https://github.com/colarusso/mytoymodels#documenation" target="_blank" class="body_links">the documentation</a>.<sup>&dagger;</sup>
 		</p>
 
 		<textarea id="model_json" style="width:100%;height:55vh;" oninput="changes=1"></textarea>
 
 		<div id="wrap_box" style="display: block;">
-		<span style="float:right"><a href="javascript:void('');" class="body_links">observations.csv</a></span>
+		<span style="float:right"><a href="javascript:void('');" onClick="arr2csv();" class="body_links">observations (CSV)</a></span>
 		<label><input type="checkbox" id="wrap" name="wrap" value="1" onchange="toggle_wrap('');"> word wrap</label> 
 		</div>
 		<div class="button_container">
 			<a href="javascript:void('')" onClick="save_changes();" class="button">Save Changes</a>
-			<a href="javascript:void('')" onClick="make_new();" class="button">Save &amp; Train</a>
+			<a href="javascript:void('')" onClick="save_and_train(1);" class="button">Save &amp; Train</a>
 			<a href="javascript:void('')" onClick="delete_mod();" class="button" style="background:#c61c1c">Delete</a>
 		</div>
 		<div style="float:left;width:100%;margin:5px 0 70px 0;">
@@ -134,7 +137,7 @@
 
 <div id="footer" class="footer">
 	<a id="about" href="javascript:void('');" onClick="show_about();">About</a> | 
-	<a id="tos" href="terms">Terms</a> | 
+	<a id="tos" href="javascript:void('')" onClick="show_tos()">Terms</a> | 
 	<a id="feedback" href="https://forms.gle/" target="_blank">Feedback</a>
 	<span style="float: right;"><a id="mode" href="javascript:void('')" onClick="dark_mode(1)" style="text-decoration: none;">🌗</a></span>
 </div>
@@ -209,12 +212,18 @@ function show_about(){
 		changes = 0;
 		document.title = "About My Toy Models";
 		$('#about').show();
+		$('#tos').hide();
 		$('#list_screen').hide();
 		$('#new_model_screen').hide();
+		$('#build_new').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "about";
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
 		$('#new_mod').show();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
@@ -224,6 +233,41 @@ function show_about(){
 		window.scrollTo(0,0);
 	}
 }
+
+function show_tos(){
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		document.title = "Terms of Service";
+		$('#about').hide();
+		$('#tos').show();
+		$('#list_screen').hide();
+		$('#new_model_screen').hide();
+		$('#build_new').hide();
+		$('#run').hide();
+		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
+		$('#edit_screen').hide();
+		localStorage.screen = "about";
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+		window.scrollTo(0,0);
+	}
+}
+
 
 function show_list() {
 	var go = 1;
@@ -245,19 +289,27 @@ function show_list() {
 		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
 
 		$('#about').hide();
+		$('#tos').hide();
 		$('#list_screen').show();
 		$('#new_model_screen').hide();
+		$('#build_new').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "list";
-		$('#new_mod').hide();
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'none');
+		$('#models_link').css('font-weight', 'bold');
+		$('#new_mod').show();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
 		$('#edit_mod').hide();
 		dark_mode();
 		window.scrollTo(0,0);
+
+		mem_usage();
 	}
 }
 
@@ -275,20 +327,25 @@ function show_lib() {
 		$('#list').empty();
 		i = 0;
 		for (question in library) {
-			console.log(question)
 			$('#list').append(`<div class="list_item" onclick="load_lib_model(`+i+`);show_list();"><div style="float:right;height:100%;padding:0 0px 15px 15px;"><span class="plus">+</span></div>Add <b><i>`+library[question]["question"]+`</i></b> to <i>Models</i></div>`);
 			i+=1;
 		}
 		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
 
 		$('#about').hide();
+		$('#tos').hide();
 		$('#list_screen').show();
 		$('#new_model_screen').hide();
+		$('#build_new').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "lib";
-		$('#new_mod').hide();
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
+		$('#new_mod').show();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
@@ -310,12 +367,18 @@ function make_new() {
 		changes = 0;
 		document.title = "Make New Model";
 		$('#about').hide();
+		$('#tos').hide();
 		$('#list_screen').hide();
 		$('#new_model_screen').show();
+		$('#build_new').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "new";
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
 		$('#new_mod').hide();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
@@ -325,6 +388,42 @@ function make_new() {
 		window.scrollTo(0,0);
 	}
 }
+
+
+function show_build(){
+	var go = 1;
+	if (changes==1) {
+		let text = "You've made changes to your model without saving. Press OK to discard these changes and leave this page, or press Cancel to stay here.";
+		if (confirm(text) != true) {
+			go = 0;
+		}
+	}
+	if (go==1) {
+		changes = 0;
+		document.title = "Terms of Service";
+		$('#about').hide();
+		$('#tos').hide();
+		$('#list_screen').hide();
+		$('#new_model_screen').hide();
+		$('#build_new').show();
+		$('#run').hide();
+		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
+		$('#edit_screen').hide();
+		localStorage.screen = "about";
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
+		$('#new_mod').show();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
+		dark_mode();
+		window.scrollTo(0,0);
+	}
+}
+
 
 function show_model() {
 
@@ -463,13 +562,19 @@ function show_model() {
 		load_model();
 		document.title = "Model: "+JSON.parse(localStorage.questions)[0]["question"];
 		$('#about').hide();
+		$('#tos').hide();
 		$('#list_screen').hide();
 		$('#new_model_screen').hide();
+		$('#build_new').hide();
 		$('#run').show();
 		$('#ground_truth_screen').hide();	
+		$('#training').hide();	
 		$('#edit_screen').hide();
 		localStorage.screen = "run";
-		$('#new_mod').hide();
+		$('#models_link').show();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
+		$('#new_mod').show();
 		$('#upload_link').hide();
 		$('#down_mod').hide();
 		$('#run_mod').hide();
@@ -498,7 +603,9 @@ function ground_truth() {
 		html += `</select>`;
 	}
 
-	html += `</p><p><a href="javascript:void('')" onClick="save_obs();" class="button" style="margin-bottom: 20px;">Save Observation</a></p>`
+	html += `</p><div class="button_container"><a href="javascript:void('')" onClick="save_obs();" class="button";">Save Observation</a>`
+	html += `<a href="javascript:void('')" onClick="save_obs();save_and_train(0);" class="button">Save and Train</a>`
+	html += `<a href="javascript:void('')" onClick="show_model();" class="button">Go Back W/O Saving</a></div>`
 
 	$('#ground_truth_screen').append(html);
 
@@ -507,12 +614,18 @@ function ground_truth() {
 	});
 
 	$('#about').hide();
+	$('#tos').hide();
 	$('#list_screen').hide();
 	$('#new_model_screen').hide();
+	$('#build_new').hide();
 	$('#run').hide();
 	$('#ground_truth_screen').show();	
+	$('#training').hide();	
 	$('#edit_screen').hide();
 	localStorage.screen = "run";
+	$('#models_link').hide();
+	$('#models_link').css('text-decoration', 'underline');
+	$('#models_link').css('font-weight', 'normal');
 	$('#new_mod').hide();
 	$('#upload_link').hide();
 	$('#down_mod').hide();
@@ -521,8 +634,7 @@ function ground_truth() {
 
 }
 
-
-function save_obs() {
+function save_obs(mode=1) {
 
 	models = JSON.parse(localStorage.questions)
 	model = models[0]
@@ -554,10 +666,59 @@ function save_obs() {
 
 	localStorage.removeItem('feature_values');
 
-	load_model();
-	show_model();
+	if (mode=1) {
+		load_model();
+		show_model();
+	}
 }
 
+function save_and_train(mode=0) {
+
+	save_changes();
+
+	$('#spinner_here').empty();
+	if (localStorage.dark_mode==1) {
+		tickcolor = '#ddd';		
+	} else {
+		tickcolor = '#000';		
+	}
+	start_spinner('spinner_here',tickcolor);
+
+	$('#about').hide();
+	$('#tos').hide();
+	$('#list_screen').hide();
+	$('#new_model_screen').hide();
+	$('#build_new').hide();
+	$('#run').hide();
+	$('#ground_truth_screen').hide();	
+	$('#training').show();	
+	$('#edit_screen').hide();
+	//localStorage.screen = "run";
+	$('#models_link').hide();
+	$('#models_link').css('text-decoration', 'underline');
+	$('#models_link').css('font-weight', 'normal');
+	$('#new_mod').hide();
+	$('#upload_link').hide();
+	$('#down_mod').hide();
+	$('#run_mod').hide();
+	$('#edit_mod').hide();
+
+	passed = train_model();
+
+	setTimeout(function(){
+		if (!passed) {
+			alert("Unable to build model! Your observations have been saved, but more data is needed. Add more and try again.")
+		}
+		save_obs(0);
+		load_model();
+		if (mode==0) {
+			show_model();
+		} else {
+			show_edit();
+		}
+	},1000);
+
+}
 
 function run_model(){
 	
@@ -608,12 +769,18 @@ function run_model(){
 function show_edit() {
 	document.title = "Edit: "+JSON.parse(localStorage.questions)[0]["question"];
 	$('#about').hide();
+	$('#tos').hide();
 	$('#list_screen').hide();
 	$('#new_model_screen').hide();
+	$('#build_new').hide();
 	$('#run').hide();
 	$('#ground_truth_screen').hide();	
+	$('#training').hide();	
 	$('#edit_screen').show();
 	localStorage.screen = "edit";
+	$('#models_link').show();
+	$('#models_link').css('text-decoration', 'underline');
+	$('#models_link').css('font-weight', 'normal');
 	$('#new_mod').show();
 	$('#upload_link').show();
 	$('#down_mod').show();
@@ -635,7 +802,11 @@ function load_model(n=0){
 		//document.title = question;
 		$('#question_text').html(question);
 		$('#prediction_text').html("--<sup>&dagger;</sup>");
-		$('#n_entires').html(question_arr[0]["training"]["observations"].length);
+		if (question_arr[0]["trained_on"]) {
+			$('#n_entires').html(question_arr[0]["trained_on"]);
+		} else {
+			$('#n_entires').html('<i>n</i>');
+		}
 		$('#features_wrapper').css('top',($('#prediction').height()+40)+'px'); 
 		$('#features_wrapper').scrollTop(0);
 	}
@@ -651,7 +822,11 @@ function load_lib_model(n=0){
 	//document.title = question;
 	$('#question_text').html(question);
 	$('#prediction_text').html("--<sup>&dagger;</sup>");
-	$('#n_entires').html(question_arr[0]["training"]["observations"].length);
+	if (question_arr[0]["trained_on"]) {
+		$('#n_entires').html(question_arr[0]["trained_on"]);
+	} else {
+		$('#n_entires').html('<i>n</i>');
+	}
 	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px'); 
 	$('#features_wrapper').scrollTop(0);
 }
@@ -679,6 +854,67 @@ function format_check(json){
 		output = "Please check your code, edit, and try again.";	
 	}
 	return output
+}
+
+function mem_limit() {
+	if (localStorage && !localStorage.getItem('mem_limit')) {
+		var i = 0;
+		try {
+			// Test up to 10 MB
+			for (i = 250; i <= 10000; i += 250) {
+				localStorage.setItem('mem_test', new Array((i * 1024) + 1).join('a'));
+			}
+		} catch (e) {
+			localStorage.removeItem('mem_test');
+			localStorage.setItem('mem_limit', i - 250);            
+		}
+	}
+}
+
+function mem_usage() {
+	console.log("MEMORY REPORT")
+	mem_limit();
+	var _lsTotal = 0,
+    _xLen, _x;
+	for (_x in localStorage) {
+		if (!localStorage.hasOwnProperty(_x)) {
+			continue;
+		}
+		_xLen = ((localStorage[_x].length + _x.length) * 2);
+		_lsTotal += _xLen;
+		console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+	};
+	kbs = (_lsTotal / 1024).toFixed(2)
+	console.log("Total = " + kbs + " KB");
+	percentage = (_lsTotal / 1024).toFixed(2)/localStorage.mem_limit
+	console.log("Limit = " + localStorage.mem_limit + " KB");
+	console.log("Pecentage = " + percentage);
+
+	if (percentage>=0.4) {
+		alert('Your model library is taking up '+ kbs + " KB. Consider saving some of your data to file(s) and deleting them from here to free up space.")
+	}
+	//return percentage
+}
+
+function arr2csv(){
+	csv = JSON.parse(localStorage.questions)[0]["training"]["observations"] 
+	csv.unshift(JSON.parse(localStorage.questions)[0]["training"]["headers"])
+
+	csv_text = "";
+
+	for(var i=0; i<csv.length; i++){
+		row = csv[i]
+		for(var j=0; j<row.length; j++){
+			if (j>0) {
+				csv_text += ","
+			}
+    		csv_text += JSON.stringify(row[j]);
+		}
+		csv_text += "\n";
+	}
+
+	filename = snake_case(JSON.parse(localStorage.questions)[0]["question"]).slice(0,25);
+	saveTextAsFile(csv_text,"observations-"+filename+".csv");
 }
 
 //===========================================
@@ -778,6 +1014,7 @@ function toggle_wrap(value) {
 
 function load_page() {
 	load_model();
+	
 	if (localStorage.screen=="list") {
 		show_list();
 	} else if (localStorage.screen=="lib") {
@@ -792,6 +1029,10 @@ function load_page() {
 		show_about();
 	}
 	check_wrap();
+
+	setTimeout(function(){
+			mem_usage();
+	});	
 	//start_spinner('loading_box');
 	//passcheck();
 }
@@ -808,17 +1049,98 @@ $(window).bind('beforeunload', function(){
 });
 
 function save_changes() {
-	var question_arr = JSON.parse(localStorage.questions);
-	active_json = JSON.parse($('#model_json').val());
-	error_msg = format_check(active_json);
-	if (error_msg.length==0) {
-		question_arr[0] = active_json;
-		localStorage.questions = JSON.stringify(question_arr);
-		changes = 0;
-	} else {
-		alert("There was an issue with your json format. No changes have been saved. " + error_msg)
+	try {
+		var question_arr = JSON.parse(localStorage.questions);
+		active_json = JSON.parse($('#model_json').val());
+		error_msg = format_check(active_json);
+		if (error_msg.length==0) {
+			question_arr[0] = active_json;
+			localStorage.questions = JSON.stringify(question_arr);
+			changes = 0;
+		} else {
+			alert("There was an issue with your json format. No changes have been saved. " + error_msg)
+		}		
+	} catch (error) {
+		alert("There was an issue with your json format. No changes have been saved. ")
 	}
 }
+
+function wrangle() {
+	data = JSON.parse(localStorage.questions)[0]["training"]["observations"] 
+	//data.unshift(JSON.parse(localStorage.questions)[0]["training"]["headers"])
+	var removeIndexes = [0,data[0].length-1]
+	data = data.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
+	for(var i=0; i<data.length; i++){
+		row = data[i]
+		j = row.length-1
+		if (row[j].toLowerCase()=="yes") {
+			data[i][j] = 1;
+		} else if (row[j].toLowerCase()=="no") {
+			data[i][j] = 0;
+		}
+	}
+	return data
+}
+
+
+function train_model(mode=0){
+
+	models = JSON.parse(localStorage.questions)
+	this_model = models[0]
+
+	data = wrangle();
+	
+	console.log(this_model["type"])
+	console.log(data)
+
+	if (this_model["type"]=="continuous") {
+		console.log("Linear Regressions")
+		// === Create the linear regression === //
+		var regression = new jsregression.LinearRegression({
+			alpha: 0.00000001, // 
+			iterations: 3000,
+			lambda: 0.0,
+			trace: false
+		});
+
+		// === Train the linear regression === //
+		var r_model = regression.fit(data);
+	} else if (this_model["type"]=="categorical") {
+		console.log("Logistic Regressions")
+		// === Create the logistic regression === //
+		var logistic = new jsregression.LogisticRegression({
+			alpha: 0.00000001,
+			iterations: 3000,
+			lambda: 0.0
+		});
+
+		// === Train the logistic regression === //
+		var r_model = logistic.fit(data);		
+	}
+
+	headers = [JSON.parse(localStorage.questions)[0]["training"]["headers"]]
+	var removeIndexes = [0,headers[0].length-2,headers[0].length-1]
+	headers = headers.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
+	
+	//headers[0].unshift("intercept")
+	headers[0].push("intercept")
+	
+	console.log(data.length);
+	coefficients = {}
+	for (feature in headers[0]){
+		coefficients[headers[0][feature]] = r_model["theta"][feature];
+	}
+
+	models[0]["trained_on"] = data.length
+	models[0]["coefficients"] = coefficients
+
+	$('#model_json').val(JSON.stringify(models[0], null, 2));
+	localStorage.question = JSON.stringify(models);
+
+	return true
+
+}
+
 
 </script>
 
@@ -840,9 +1162,10 @@ function save_changes() {
 	X dynamicly build run model page from json
 	X save feature values to storage before ground truth (save state)
 	X log ground truth functionality (upload status)
+	X add size limit warnings
 	- [NEW SCREEN] terms
 	- [NEW SCREEN] build new page functionality
-	- [NEW SCREEN] add training feature
+	- add training feature
 
 	- add interaction terms
 	- add exclude terms list

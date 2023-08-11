@@ -2,15 +2,15 @@
 // Interactions (spinner, beep, keyboard typing...) 
 //==============================================================
 
-function start_spinner(target_id) {
+function start_spinner(target_id,tickcolor='#000') {
     var opts = {
-      lines: 13, // The number of lines to draw
-      length: 7, // The length of each line
-      width: 5, // The line thickness
-      radius: 15, // The radius of the inner circle
+      lines: 10, // The number of lines to draw
+      length: 27, // The length of each line
+      width: 8, // The line thickness
+      radius: 23, // The radius of the inner circle
       corners: 1, // Corner roundness (0..1)
       rotate: 0, // The rotation offset
-      color: '#000', // #rgb or #rrggbb
+      color: tickcolor, // #rgb or #rrggbb
       speed: 1, // Rounds per second
       trail: 60, // Afterglow percentage
       shadow: false, // Whether to render a shadow
