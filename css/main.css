@@ -36,6 +36,11 @@ body {
 	text-decoration: none;
 }	
 
+#model_json {
+	font-size: 15px;
+	line-height:18px;
+}
+
 .menu_bar { 
 	position:fixed; 
 	background: #eee;
