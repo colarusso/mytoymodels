@@ -678,6 +678,7 @@ function save_obs(mode=1) {
 	localStorage.questions = JSON.stringify(models);
 
 	localStorage.removeItem('feature_values');
+	mem_usage();
 
 	if (mode==1) {
 		load_model();
@@ -722,8 +723,9 @@ function save_and_train(mode=0) {
 	setTimeout(function(){
 		if (!passed) {
 			alert("Unable to build model! Any observations have been saved, but more data is needed. Add more and try again.")
+		} else {
+			save_changes();
 		}
-		save_changes();
 		load_model();
 		if (mode==0) {
 			show_model();
@@ -1161,26 +1163,30 @@ function train_model(mode=0){
 		var r_model = logistic.fit(data);		
 	}
 
-	headers = [JSON.parse(localStorage.questions)[0]["training"]["headers"]]
-	var removeIndexes = [0,headers[0].length-2,headers[0].length-1]
-	headers = headers.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
-	
-	//headers[0].unshift("intercept")
-	headers[0].push("intercept")
-	
-	console.log(data.length);
-	coefficients = {}
-	for (feature in headers[0]){
-		coefficients[headers[0][feature]] = r_model["theta"][feature];
+	if (r_model["theta"][0]) {
+		headers = [JSON.parse(localStorage.questions)[0]["training"]["headers"]]
+		var removeIndexes = [0,headers[0].length-2,headers[0].length-1]
+		headers = headers.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
+		
+		//headers[0].unshift("intercept")
+		headers[0].push("intercept")
+		
+		console.log(data.length);
+		coefficients = {}
+		for (feature in headers[0]){
+			coefficients[headers[0][feature]] = r_model["theta"][feature];
+		}
+
+		models[0]["trained_on"] = data.length
+		models[0]["coefficients"] = coefficients
+
+		$('#model_json').val(JSON.stringify(models[0], null, 2));
+		localStorage.question = JSON.stringify(models);
+
+		return true
+	} else {
+		return false
 	}
-
-	models[0]["trained_on"] = data.length
-	models[0]["coefficients"] = coefficients
-
-	$('#model_json').val(JSON.stringify(models[0], null, 2));
-	localStorage.question = JSON.stringify(models);
-
-	return true
 
 }
 
