@@ -92,47 +92,118 @@
 </div>
 
 <div id="build_new" class="build_new">
-	<h2>Build New</h2>
-	<h3>What do you want to do?</h3>
-	<p>lorum ipsum</p>
+	<h2>Build A Model From Scratch</h2>
 	<div id="input_question_type">
-		<a href="javascript:void('')" onClick="" class="button">A Numeric Value</a>
-		<a href="javascript:void('')" onClick="" class="button">Yes or No (odds of Yes)</a>
+		<p>lorum ipsum</p>
+		<h3>What do you want to do?</h3>
+			<a href="javascript:void('')" onClick="new_model_type('continuous')" class="button">A Numeric Value</a>
+		<a href="javascript:void('')" onClick="new_model_type('categorical')" class="button">Yes or No (odds of Yes)</a>
 	</div>
 	<div id="input_question">
 		<p>
-			<h3>Your Question</h3>
 			<p>lorum ipsum</p>
+			<h3>Your Question</h3>
+			<input>
+			<p>lorum ipsum</p>
+			<h3>Note (optional)</h3>
 			<input>
 		</p>
-		<a href="javascript:void('')" onClick="" class="button">Add Features</a>
+		<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
+		<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Features</a>
 	</div>
 	<div id="input_features">
 		<p>
-			<h3>Feature Name</h3>
 			<p>lorum ipsum</p>
+			<h3>Feature Name</h3>
+			<input>
+			<p>lorum ipsum</p>
+			<h3>More (optional)</h3>
 			<input>
 		</p>
 		<p>
-			<h3>Type of Feature</h3>
 			<p>lorum ipsum</p>
-			<select>
-				<option>1</option>
+			<h3>Type of Feature</h3>
+			<select id="choose_type" oninput="new_model_feature_type(this.value)">
+				<option value="choose">Choose One</option>
+				<option value="continuous">Continuous</option>
+				<option value="categorical">Categorical</option>
 			</select>
 		</p>
-		<p>
+		<div id="feature_units">
+			<p>lorum ipsum</p>
 			<h3>Units</h3>
-			<p>lorum ipsum</p>
 			<input>
-		</p>
-		<p>
-			<h3>Options</h3>
+		</div>
+		<div id="feature_options">
 			<p>lorum ipsum</p>
-			<input>	<input type="button" value="Add Option"/>	
-		</p>
-		<a href="javascript:void('')" onClick="" class="button">Add Feature</a>		
+			<h3>Options</h3>
+			<p id="feature_options_list">
+				<input>	
+			</p>
+			<p>
+				<input type="button" onClick="add_feature_option()" value="Add Option"/>
+			</p>
+		</div>
+		<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
+		<div id="feature_next">
+			<p>
+				<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Another Feature</a>		
+				<a href="javascript:void('')" onClick="finalize_model()" class="button">Finalize Model</a>		
+			</p>
+		</div>
+	</div>
+	<div id="forget">
+		<a href="javascript:void('')" onClick="make_new()" class="button" style="background-color:red">Forget This Model</a>
 	</div>
 </div>
+
+<script>
+	var tmp = {}
+	function new_model_type(type) {
+		tmp["type"] = type;
+		new_model_question();
+		window.scrollTo(0,0);
+	}
+	function new_model_question() {
+		$('#forget').show();
+		$('#input_question_type').hide();
+		$('#input_question').show();
+		window.scrollTo(0,0);
+	}
+	function new_model_feature() {
+		$('#input_question_type').hide();
+		$('#input_question').hide();
+		$('#input_features').show();
+		$('#feature_units').hide();
+		$('#feature_options').hide();
+		$('#feature_next').hide();
+		$("#choose_type").val("choose");
+		window.scrollTo(0,0);
+	}
+	function new_model_feature_type(type) {
+		if (type=="choose"){
+			$('#feature_units').hide();
+			$('#feature_options').hide();
+			$('#feature_next').hide();
+		} else if (type=="continuous"){
+			$('#feature_units').show();
+			$('#feature_options').hide();
+			$('#feature_next').show();
+		} else if (type=="categorical") {
+			$('#feature_options_list').empty();
+			$('#feature_options_list').append(`<input>`)
+			$('#feature_units').hide();
+			$('#feature_options').show();
+			$('#feature_next').show();
+		}
+	}
+	function add_feature_option() {
+		$('#feature_options_list').append(`<input>`)
+	}
+	function finalize_model() {
+		show_list();
+	}
+</script>
 
 <div id="run">
 	<div id="prediction" class="prediction">
@@ -445,12 +516,16 @@ function show_build(){
 	}
 	if (go==1) {
 		changes = 0;
-		document.title = "Terms of Service";
+		document.title = "Build Model From Scratch";
 		$('#about').hide();
 		$('#tos').hide();
 		$('#list_screen').hide();
 		$('#new_model_screen').hide();
 		$('#build_new').show();
+		$('#input_question_type').show();
+		$('#input_question').hide();
+		$('#input_features').hide();
+		$('#forget').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
 		$('#training').hide();	
@@ -507,7 +582,7 @@ function show_model() {
 				html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+feature_values[snake_case(element["name"])]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();">`;
 			} else if (element["type"]=="categorical") {
 				html += `<b>`+(index+1)+`) `+element["name"]+`:</b><p>`;			
-				html += `<select id="`+snake_case(element["name"])+`" class="select" oninput="run_model();">`;
+				html += `<select id="`+snake_case(element["name"])+`" oninput="run_model();">`;
 					for (cat in element["categories"]) {
 						html += `<option value="`+element["categories"][cat]+`"`;
 						if (element["categories"][cat]==feature_values[element["name"]]) {
