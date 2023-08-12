@@ -91,7 +91,48 @@
 	</div>
 </div>
 
-<div id="build_new" class="build_new"><h2>Build New</h2></div>
+<div id="build_new" class="build_new">
+	<h2>Build New</h2>
+	<h3>What do you want to do?</h3>
+	<p>lorum ipsum</p>
+	<div id="input_question_type">
+		<a href="javascript:void('')" onClick="" class="button">A Numeric Value</a>
+		<a href="javascript:void('')" onClick="" class="button">Yes or No (odds of Yes)</a>
+	</div>
+	<div id="input_question">
+		<p>
+			<h3>Your Question</h3>
+			<p>lorum ipsum</p>
+			<input>
+		</p>
+		<a href="javascript:void('')" onClick="" class="button">Add Features</a>
+	</div>
+	<div id="input_features">
+		<p>
+			<h3>Feature Name</h3>
+			<p>lorum ipsum</p>
+			<input>
+		</p>
+		<p>
+			<h3>Type of Feature</h3>
+			<p>lorum ipsum</p>
+			<select>
+				<option>1</option>
+			</select>
+		</p>
+		<p>
+			<h3>Units</h3>
+			<p>lorum ipsum</p>
+			<input>
+		</p>
+		<p>
+			<h3>Options</h3>
+			<p>lorum ipsum</p>
+			<input>	<input type="button" value="Add Option"/>	
+		</p>
+		<a href="javascript:void('')" onClick="" class="button">Add Feature</a>		
+	</div>
+</div>
 
 <div id="run">
 	<div id="prediction" class="prediction">
@@ -414,7 +455,7 @@ function show_build(){
 		$('#ground_truth_screen').hide();	
 		$('#training').hide();	
 		$('#edit_screen').hide();
-		localStorage.screen = "about";
+		localStorage.screen = "new";
 		$('#models_link').show();
 		$('#models_link').css('text-decoration', 'underline');
 		$('#models_link').css('font-weight', 'normal');
@@ -538,7 +579,6 @@ function show_model() {
 	}	
 
 	html += model_html + `</div>
-
 				Where:
 				<ul>`;
 	html += given_html + `</ul>`;
@@ -1227,6 +1267,7 @@ function train_model(mode=0){
 	X fix links in dark mode
 	X format caption text
 	X scroll to top for all screens on change
+	- Word wrap
 
 	// Writing
 	- write feedback form
