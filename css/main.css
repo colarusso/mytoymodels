@@ -57,6 +57,10 @@ input {
 	display: none;
 }
 
+#remove_option {
+	display: none;
+}
+
 #forget {
 	display: none;
 	padding-bottom: 100px;

@@ -103,10 +103,10 @@
 		<p>
 			<p>lorum ipsum</p>
 			<h3>Your Question</h3>
-			<input>
+			<input id="new_json_question">
 			<p>lorum ipsum</p>
 			<h3>Note (optional)</h3>
-			<input>
+			<input id="new_json_note">
 		</p>
 		<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 		<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Features</a>
@@ -115,10 +115,10 @@
 		<p>
 			<p>lorum ipsum</p>
 			<h3>Feature Name</h3>
-			<input>
+			<input id="new_json_feature_name">
 			<p>lorum ipsum</p>
 			<h3>More (optional)</h3>
-			<input>
+			<input id="new_json_feature_more">
 		</p>
 		<p>
 			<p>lorum ipsum</p>
@@ -132,22 +132,24 @@
 		<div id="feature_units">
 			<p>lorum ipsum</p>
 			<h3>Units</h3>
-			<input>
+			<input id="new_json_feature_units">
 		</div>
 		<div id="feature_options">
 			<p>lorum ipsum</p>
 			<h3>Options</h3>
 			<p id="feature_options_list">
-				<input>	
+				<input id="new_json_feature_option_0">	
 			</p>
-			<p>
+			<p id="remove_option" >
+				<input type="button" onClick="remove_last()" style="background:rgb(255, 100, 100)" value="Remove Last"/>
+			</p><p>
 				<input type="button" onClick="add_feature_option()" value="Add Option"/>
 			</p>
 		</div>
 		<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 		<div id="feature_next">
 			<p>
-				<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Another Feature</a>		
+				<a href="javascript:void('')" onClick="new_model_feature(1)" class="button">Add Another Feature</a>		
 				<a href="javascript:void('')" onClick="finalize_model()" class="button">Finalize Model</a>		
 			</p>
 		</div>
@@ -160,17 +162,22 @@
 <script>
 	var tmp = {}
 	function new_model_type(type) {
+		tmp = {}
 		tmp["type"] = type;
 		new_model_question();
 		window.scrollTo(0,0);
+		$('#new_json_question').focus();
 	}
 	function new_model_question() {
 		$('#forget').show();
 		$('#input_question_type').hide();
 		$('#input_question').show();
 		window.scrollTo(0,0);
+		$('#new_json_feature_name').focus();	
+		console.log("Building model...")
+		console.log(tmp)
 	}
-	function new_model_feature() {
+	function new_model_feature(mode=0) {
 		$('#input_question_type').hide();
 		$('#input_question').hide();
 		$('#input_features').show();
@@ -179,6 +186,28 @@
 		$('#feature_next').hide();
 		$("#choose_type").val("choose");
 		window.scrollTo(0,0);
+		$('#new_json_feature_name').focus();	
+		if (mode==0) {	
+			tmp["question"] = $('#new_json_feature_name').val();
+			if ($('#new_json_question').val().trim()!="") {
+				tmp["description"] = $('#new_json_question_note').val();
+			}
+			tmp["features"] = []
+		} else if (mode==1) {
+			feature = {}
+			feature["name"] = $('#new_json_feature_name').val();
+			if ($('#new_json_feature_more').val().trim()!="") {
+				feature["description"] = $('#new_json_feature_more').val();
+			}
+			if ($('#choose_type').val()=="continuous") {
+				feature["type"] = "continuous"
+			} else if ($('#choose_type').val()=="categorical") {
+				feature["type"] = "categorical"
+			}
+			tmp["features"].push(feature)
+		}
+		console.log("Building model...")
+		console.log(tmp)
 	}
 	function new_model_feature_type(type) {
 		if (type=="choose"){
@@ -192,15 +221,28 @@
 		} else if (type=="categorical") {
 			$('#feature_options_list').empty();
 			$('#feature_options_list').append(`<input>`)
+			$('#remove_option').hide();
 			$('#feature_units').hide();
 			$('#feature_options').show();
 			$('#feature_next').show();
+			dark_mode();
+			$('#new_json_feature_option_0').focus();		
 		}
+		console.log("Building model...")
+		console.log(tmp)
 	}
 	function add_feature_option() {
-		$('#feature_options_list').append(`<input>`)
+		$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
+		$('#new_json_feature_option_0').focus();		
+		$('#remove_option').show();
+		dark_mode();
+	}
+	function remove_last() {
+		//
 	}
 	function finalize_model() {
+		console.log("Building model...")
+		console.log(tmp)
 		show_list();
 	}
 </script>
@@ -399,7 +441,8 @@ function show_list() {
 			$('#list').append(`<div class="list_item" onclick="localStorage.removeItem('feature_values');load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions)[question]["question"]+`</div>`);
 			i+=1;
 		}
-		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
+		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a>
+		<p><i>Note: To remove a model, navigate to the model's "Edit" screen, then choose "Delete."</i></p></div>	`);
 
 		$('#about').hide();
 		$('#tos').hide();
