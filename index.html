@@ -13,28 +13,22 @@
 	<meta property="og:type" content="website"/>
 	<meta property="og:title" content="My Toy Models"/>
 	<meta property="og:description" content="If you’ve ever wanted to “run a study” on some aspect of your personal life, this site is for you. It lets you “science the heck” out of your pet hypotheses—building simple predictive models (regressions) around your data."/>
+	<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Linear_regression.svg/580px-Linear_regression.svg.png"/>
 	
-	<link rel="stylesheet" type="text/css" href="css/main.css?v=2023-05-10.13:09">
-	<link rel="stylesheet" type="text/css" href="css/spin.css?v=2023-05-10.13:09">
+	<link rel="stylesheet" type="text/css" href="css/main.css?v=2023-08-16.12:00">
+	<link rel="stylesheet" type="text/css" href="css/spin.css?v=2023-08-16.12:00">
+	<script src="js/model_lib.js?v=2023-08-16.12:00"></script>
+	<script src="js/interactions.js?v=2023-08-16.12:00"></script>
 
-	<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<!--<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>-->
+
+	<script src="js/jquery-1.11.1.min.js"></script>
 	
-	<script type="module" src="https://findmycite.org/js/spin.min.js"></script>
-	<script src="js/interactions.js?v=2023-05-10.13:09"></script>
+	<script src="js/spin/spin.min.js"></script>
 	
-	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-	<script id="MathJax-script" async
-			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<script id="MathJax-script" async src="js/mathjax/tex-mml-chtml.js"></script>
 
-	<script src="js/model_lib.js?v=2023-05-10.13:09"></script>
-
-	<script src="https://rawgit.com/chen0040/js-regression/master/build/jsregression.min.js" type="application/javascript"></script>
-
-	<!--
-	<script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"></link>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/abbott.min.css"></link>
-	-->
+	<script src="js/js-regression/jsregression.min.js" type="application/javascript"></script>
 
 </HEAD>
 
@@ -54,15 +48,15 @@
 <div id="about" class="about">
 	<h2>Your Toy Models</h2>
 	<p>
-	If you’ve ever wanted to “run a study” on some aspect of your personal life, this site is for you. It lets you "science the heck" out of your pet hypotheses—building simple predictive models (<a href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank" class="body_links">regressions</a>) around your data. All the number crunching runs in your browser. So your data stays on your device (unless you activly download and share it, which I tried to make easy).  
+	If you've ever wanted to "run a study" on some aspect of your personal life, this site is for you. It lets you "science the heck" out of your pet hypotheses—building simple predictive models (<a href="https://en.wikipedia.org/wiki/Regression_analysis" target="_blank" class="body_links">regressions</a>) around your data. All the number crunching runs in your browser. So your data stays on your device (unless you activly download and share it, which I tried to make easy).  
 	</p>
-	<img src="images/colarusso.jpg" style="border-radius: 50%;float:left;width:50px;margin:0 15px 5px 0;"/>
+	<a href="https://mastodon.social/@Colarusso" target="_blank" class="body_links"><img src="images/colarusso.jpg" style="border-radius: 50%;float:left;width:50px;margin:0 15px 5px 0;"/></a>
 	<p>
-	I <a href="https://www.codingthelaw.org" target="_blank">teach law students</a> about data, machine learning, and “AI.” I made this tool so they could get a feel for <i>narrow AI</i> (machine learning) by building their own. As Richard Feynman observed, “that which I cannot create, I do not understand.” That being said, I don’t expect my students to become statisticians or data scientists. Rather, I want them to learn enough to understand the realm of the possible and call BS when needed. To that end, this site lets you create your own <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank">toy models</a>, intentional simplifications that help folks explore the dynamics of a situation. That being said, keep in mind the tools provided here embody that dangerous mix of power and ease of use. Please consult a statistics text before assuming you know what they are telling you. ;)
+	Greetings dear reader, my name is <a href="https://mastodon.social/@Colarusso" target="_blank" class="body_links">David Colarusso</a>, and I <a href="https://www.codingthelaw.org" target="_blank" class="body_links">teach law students</a> about data, machine learning, and “AI.” I made this tool to help my students get a feel for <i>narrow AI</i> (machine learning) by building their own. As Richard Feynman observed, “that which I cannot create, I do not understand.” That being said, I don’t expect my students to become statisticians or data scientists. Rather, I want them to learn enough to understand the realm of the possible and to call BS when needed. To that end, this site lets you create your own <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank" class="body_links">toy models</a>, intentional simplifications that help folks explore the dynamics of a situation. That being said, keep in mind that this tools provided here are that dangerous mix of power and ease of use. If you can't make it to my class, please consult a <a href="https://hastie.su.domains/ElemStatLearn/printings/ESLII_print12_toc.pdf" target="_blank" class="body_links">statistics text</a> before assuming you know what they are telling you. ;)
 	</p>
-	<p>I haven't embedded analytics or tracking here, and all your data stays on your device/ My hope is this will free you to experiment honestly. But it means I don't know if folks are even using this tool unless they tell me. So, I'd apprechiate you telling what you're up to. You can find me <a href="" target="_blank">@Colarusso@mastodon.social</a> or use <a href="" target="_blank">this feedback form</a>. Want to look at the code? Check out <a href="" target="_blank">this GitHub repo</a>.</p>
+	<p>I haven't embedded analytics or tracking here, and all your data stays in your browser. I never see it. My hope is this will free you to experiment honestly. But this means I don't know if folks are even using this tool. So, I'd appreciate you sharing what you're up to. You can find me <a href="https://mastodon.social/@Colarusso" target="_blank" class="body_links">@Colarusso@mastodon.social</a> or use <a href="https://docs.google.com/forms/d/e/1FAIpQLSfNN9v_A_wtILTMKuHIKFcRmMrq3CQSC1qgMZYCIlTGdBJnmA/viewform" target="_blank" class="body_links">this feedback form</a>.</p>
 
-	<p><a href="https://github.com/colarusso/mytoymodels#documenation" target="_blank" class="body_links">the documentation</a></p>
+	<p>Want to look at the code or learn more about how to use this site? Check out <a href="https://github.com/colarusso/mytoymodels" target="_blank" class="body_links">this GitHub repo</a>. Regardless, you can get started by making a new model below.</p>
 
 	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 	<div id="first_button" class="button_container">
@@ -70,7 +64,12 @@
 	</div>
 </div>
 
-<div id="tos" class="tos"><h2>Terms of Service</h2></div>
+<div id="tos" class="tos"><h2>Terms of Service & Privacy</h2>
+<p>Your data lives in your browser's  <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank" class="body_links">LocalStorage</a> unless you take affirmitive steps to download and share it (e.g., downlaoding a model). The training of all models is done in your browser. No warrantee is offered as to the acuracy of predictions made by models you or others authored. This site is intended to help users explore and become familiar with the promise and limitations of simple prediction algoritums. You can learn more and explore the site's code on <a href="https://github.com/colarusso/mytoymodels" target="_blank" class="body_links">its GitHub repo</a>. These terms are subject to change at anytime.</p>
+<p>The site does NOT make use of tracking cookies or the like to measure engagement.</p>
+<p>THE SITE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SITE OR THE USE OR OTHER DEALINGS IN THE SITE.</p>
+<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
+<p style="text-align:right;padding-right:10px;">Updated: 2023-08-16</p></div>
 <div id="list_screen"><div id="list"></div></div>
 <div id="lib_screen"><div id="list"></div></div>
 
@@ -80,7 +79,7 @@
 			<img src="images/boxquote.png" alt="'All models are wrong, but some are useful.' - George Box" width="100%"/>
 			<div class="caption">Maps are models; they don't show everything. That's okay as long as you don't confuse the map for the territory.</div>
 		</div>
-		A model providing an answer <a href="https://www.codingthelaw.org/Fall_2022/level/4/#intro_vid" target="_blank" class="body_links">isn't a guarentee</a> that it's "right." <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank" class="body_links">Toy models</a> are intentional simplifications meant to help folks understand how things relate to eachother. This understanding, however, only comes through play. You need to know your subject matter and get your hands dirty wadding through the data&mdash;tweaking this and fiddling with that. 
+		A model providing an answer <a href="https://www.codingthelaw.org/Fall_2022/level/4/#intro_vid" target="_blank" class="body_links">isn't a guarantee</a> that it's "right." <a href="https://en.wikipedia.org/wiki/Toy_model" target="_blank" class="body_links">Toy models</a> are intentional simplifications meant to help folks understand how things relate to each other. This understanding, however, only comes through play. You need to know your subject matter and get your hands dirty looking at the data from all sides&mdash;tweaking this and fiddling with that. 
 		<p>Maybe you'll create a sleep log and figure out when it's safe to have that last coffee or discover some feature you didn't think was important really is the best predictor of your mood but only if you take the time to explore possible features and collect lots of data. Even then, remember, correlation isn't causation; <a href="https://www.kdnuggets.com/2017/02/hill-data-scientist-xkcd-story.html" target="_blank" class="body_links">consider the context</a>. And beware, for if you torture the data long enough, it will <a href="https://en.wikipedia.org/wiki/Data_dredging" target="_blank" class="body_links">confess to anything</a>. <!--For more on model making, check out this short lecture.--></p>
 		<p>Now go ahead, make a model.</p>
 		<div class="button_container">
@@ -238,8 +237,8 @@
 			if (tmp["question"].trim()=="") {
 				error += "You cannot leave the Your Question field blank. ";
 			} else {
-				if ($('#new_json_feature_more').val().trim()!="") {
-					tmp["description"] = $('#new_json_feature_more').val();
+				if ($('#new_json_note').val().trim()!="") {
+					tmp["description"] = $('#new_json_note').val();
 				}
 				tmp["features"] = []
 			}
@@ -309,7 +308,7 @@
 			if (mode!=2) {
 				$('#new_json_feature_name').val("");
 				$('#new_json_feature_more').val("");
-				
+
 				$('#input_question_type').hide();
 				$('#input_question').hide();
 				$('#input_question_target_options').hide();
@@ -342,7 +341,7 @@
 			$('#feature_next').show();
 		} else if (type=="categorical") {
 			$('#feature_options_list').empty();
-			tmp_options.push("new_json_feature_option_0")
+			tmp_options = ["new_json_feature_option_0"];
 			$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
 			tmp_options.push("new_json_feature_option_1")
 			$('#feature_options_list').append(`<input id="new_json_feature_option_1">`)
@@ -601,7 +600,7 @@ function show_tos(){
 		$('#ground_truth_screen').hide();	
 		$('#training').hide();	
 		$('#edit_screen').hide();
-		localStorage.screen = "about";
+		localStorage.screen = "tos";
 		$('#models_link').show();
 		$('#models_link').css('text-decoration', 'underline');
 		$('#models_link').css('font-weight', 'normal');
@@ -634,8 +633,8 @@ function show_list() {
 			$('#list').append(`<div class="list_item" onclick="localStorage.removeItem('feature_values');load_model(`+i+`);show_model(`+i+`);"><div style="float:right;height:100%;padding:0 0px 15px 15px;">></div>`+JSON.parse(localStorage.questions)[question]["question"]+`</div>`);
 			i+=1;
 		}
-		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a>
-		<p><i>Note: To remove a model, navigate to the model's "Edit" screen, then choose "Delete."</i></p></div>	`);
+		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a><a href="javascript:void('')" onClick="delet_all_models();" class="button" style="background:red">Delete ALL Models</a>
+		<p><i>Note: To remove a single model, navigate to the model's "Edit" screen, then choose "Delete."</i></p></div>	`);
 
 		$('#about').hide();
 		$('#tos').hide();
@@ -809,7 +808,8 @@ function show_model() {
 					if (element["type"]=="continuous") {
 						feature_values[snake_case(feature_list[feature])] = element["mean"];
 					} else if (element["type"]=="categorical") {
-						feature_values[snake_case(feature_list[feature])] = element["categories"][ element["weights"].indexOf(Math.max(...element["weights"])) ];
+						console.log(feature_list[feature],element["categories"][ element["weights"].indexOf(Math.max(...element["weights"])) ])
+						feature_values[feature_list[feature]] = snake_case(element["categories"][ element["weights"].indexOf(Math.max(...element["weights"])) ]);
 					}
 				}
 			})
@@ -829,13 +829,16 @@ function show_model() {
 				est_std = tail_diff/3
 				step_size = 10**(Number.parseFloat(est_std).toExponential(2).split("e")[1]-2);
 				html += `<b>`+(index+1)+`) `+element["name"]+`:</b>	<span id="`+snake_case(element["name"])+`">`+feature_values[snake_case(element["name"])]+`</span> (<span id="`+snake_case(element["name"])+`_units">`+element["units"]+`</span>)<p>`;
+				if (element["description"]){
+					html += `<p>`+element["description"]+`</p>`;
+				}
 				html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+feature_values[snake_case(element["name"])]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();" step="`+step_size+`">`;
 			} else if (element["type"]=="categorical") {
 				html += `<b>`+(index+1)+`) `+element["name"]+`:</b><p>`;			
 				html += `<select id="`+snake_case(element["name"])+`" oninput="run_model();">`;
 					for (cat in element["categories"]) {
 						html += `<option value="`+element["categories"][cat]+`"`;
-						if (element["categories"][cat]==feature_values[element["name"]]) {
+						if (snake_case(element["categories"][cat])==feature_values[snake_case(element["name"])]) {
 							html += ` selected`;
 						}
 						feature_values[element["name"]]
@@ -1071,7 +1074,7 @@ function save_and_train(mode=0) {
 	}
 
 	if (go) {
-		save_changes();
+		//save_changes();
 
 		$('#spinner_here').empty();
 		if (localStorage.dark_mode==1) {
@@ -1122,7 +1125,16 @@ function save_and_train(mode=0) {
 	}
 }
 
-
+function delet_all_models() {
+	let text = "Press OK to delete ALL OF YOUR MODELS, or press Cancel to stay here.";
+	if (confirm(text) == true) {
+		//localStorage.removeItem("questions");
+		localStorage.questions = "[]";
+		load_model();
+		show_list();
+		console.log("DELETING ALL MODELS!")
+	}
+}
 
 function show_edit() {
 	console.log("Show Edit Screen")
@@ -1198,7 +1210,7 @@ function load_lib_model(n=0){
 }
 
 function snake_case(text){
-	text = text.trim()
+	text = text.trim().toLowerCase();
 	text = text.replace(/[^a-zA-Z0-9]/g,"_");
 	text = text.replace(/_+/g,"_");
 	text = text.replace(/^_+|_+$/g, '');
@@ -1415,6 +1427,8 @@ function load_page() {
 		show_model();
 	} else if (localStorage.screen=="edit") {
 		show_edit();
+	} else if (localStorage.screen=="tos") {
+		show_tos();
 	} else {
 		show_about();
 	}
@@ -1578,7 +1592,7 @@ function run_model(){
 				output_array.push(0)
 				equation += " + (0)("+String(value)+")"
 			}
-			feature_values[key.split("-")[0]] = $('#'+key.split("-")[0]).val();
+			feature_values[snake_case(key.split("-")[0])] = snake_case($('#'+key.split("-")[0]).val());
 		}
 	}
 	feature_values["note"] = $('#note').val();
@@ -1603,61 +1617,11 @@ function run_model(){
 		}
 	}
 
-	//console.log(equation);
-
 }
 
 </script>
 
 <!---
-	// Functional
-	- make equations render dynamic
-
-	X get load to work
-	X reorder lists on model load
-	X get delete to work
-		X what if list is empty (deleted everything) check behavior
-	X Save changes
-	X prompt to save before leaving edit page if change
-	X add from library
-	X Check for valid format (add to save and load)
-	X load into existing or add new
-	X add save check to upload
-	X figure out what you are downloading when in edit (saved or written)
-	X dynamicly build run model page from json
-	X save feature values to storage before ground truth (save state)
-	X log ground truth functionality (upload status)
-	X add size limit warnings
-	X [NEW SCREEN] terms
-	- [NEW SCREEN] build new page functionality
-	X add training feature
-
-	- set increments on ranges 
-	- add interaction terms
-	- add exclude terms list
-
-	// Cosmetic
-	X stop features jump on prediction recaluclate
-	X get title to change back to My Models
-	X recalculate stuff on rotate
-	X remove or recolor top border line from dark modes
-	X proper padding on all pages footer
-	X fix links in dark mode
-	X format caption text
-	X scroll to top for all screens on change
-	- Word wrap
-
-	// Writing
-	- write feedback form
-	- write documenation page
-	- write terms page
-
-	// DevOps
-	- get domain
-
-	//Post MVP
-	- search for library and modles lists
-
 	Some predictions to play with:
 	- How long will my run be?
 	- Will I have a good sleep?

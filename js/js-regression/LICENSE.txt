@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 David Colarusso
+Copyright (c) 2017 Xianshun Chen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-NOT INCLUDED in the above grant of use, but included in the waiver of liability,
-is code from third-party projects used by the Software. Licenses for this code 
-can be found at: 
-
-  js/js-regression/LICENSE.txt (MIT License)
-  js/mathjax/LICENSE.txt (Apache License)
-  js/spin/LICENSE.md (MIT License)
-  js/jquery-1.11.1.min.js (MIT License)
-
