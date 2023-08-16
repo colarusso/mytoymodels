@@ -5,6 +5,10 @@ A repo to help folks create "toy" mathematical models in the form of linear and 
 
 Check out the [issues page](https://github.com/colarusso/mytoymodels/issues) to see what features and fixes are on our mind. And feel free to add your own issue(s). 
 
+### Model Library
+
+We'd help with our model library. Consider making a PR to our [library file](https://github.com/colarusso/mytoymodels/blob/main/js/model_lib.js) to add your own. 
+
 ## Documenation 
 
 Coming soon.
