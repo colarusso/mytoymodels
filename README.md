@@ -8,3 +8,13 @@ Check out the [issues page](https://github.com/colarusso/mytoymodels/issues) to 
 ## Documenation 
 
 Coming soon.
+
+## Thanks You!
+
+This project wouldn't have been possible without the following great open source projects: 
+
+- **[js-regression](https://github.com/chen0040/js-regression):** Javascript implementation of linear regression and logistic regression (MIT License)
+- **[MathJax](https://github.com/mathjax/MathJax):** Javascript to render "Beautiful and accessible math in all browsers" (Apache License)
+- **[jQuery](https://github.com/jquery/jquery):** jQuery JavaScript Library (MIT License)
+- **[spin.js](https://github.com/fgnass/spin.js):** Javascript spinning activity indicator (MIT License)
+
