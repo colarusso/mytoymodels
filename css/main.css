@@ -30,7 +30,9 @@ select {
 	width: 100%; /* Width of the outside container */
 	padding: 8px;
 	height: 40px;
-	text-align: center;
+    text-align: center;
+    text-align: -webkit-center;
+    text-align: -moz-center;
 }
 
 input {
