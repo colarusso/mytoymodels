@@ -29,11 +29,13 @@ input[type="button"]:disabled {
 select {
 	width: 100%; /* Width of the outside container */
 	padding: 8px;
+	height: 40px;
 }
 
 input {
 	width: 100%; /* Width of the outside container */
 	padding: 8px;
+	height: 40px;
 }
 
 #input_question_type {
@@ -43,6 +45,11 @@ input {
 #input_question {
 	display: none;
 }
+
+#input_question_target_options {
+	display: none;
+}
+
 #input_features {
 	display: none;
 }
@@ -69,6 +76,7 @@ input {
 
 #wrap {
 	width:auto;
+	height:auto;
 	padding: 0;
 }
  

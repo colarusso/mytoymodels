@@ -65,7 +65,7 @@
 	<p><a href="https://github.com/colarusso/mytoymodels#documenation" target="_blank" class="body_links">the documentation</a></p>
 
 	<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
-	<div class="button_container">
+	<div id="first_button" class="button_container">
 		<a href="javascript:void('')" onClick="make_new();" class="button">New Model</a>
 	</div>
 </div>
@@ -111,6 +111,20 @@
 		<hr style="border: 0px;border-top: 1px solid #555;margin:25px 0 15px 0;">
 		<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Features</a>
 	</div>
+	<div id="input_question_target_options">
+		<p>lorum ipsum</p>
+		<h3>Target Options</h3>
+		<p id="target_options_list">
+			<input id="new_json_target_option_0">
+			<input id="new_json_target_option_1">
+		</p>
+		<p id="remove_target_option" >
+			<input type="button" onClick="remove_last_target()" style="background:rgb(255, 100, 100)" value="Remove Last"/>
+		</p><p>
+			<input type="button" onClick="add_target_option()" value="Add Option"/>
+		</p>
+		<a href="javascript:void('')" onClick="new_model_feature()" class="button">Add Features</a>
+	</div>
 	<div id="input_features">
 		<p>
 			<p>lorum ipsum</p>
@@ -133,12 +147,21 @@
 			<p>lorum ipsum</p>
 			<h3>Units</h3>
 			<input id="new_json_feature_units">
+			<p>lorum ipsum</p>
+			<h3>Lower Limit</h3>
+			<input id="new_json_feature_lower" type="number">
+			<p>lorum ipsum</p>
+			<h3>Upper Limit</h3>
+			<input id="new_json_feature_upper" type="number">
+			<p>lorum ipsum</p>
+			<h3>Mean</h3>
+			<input id="new_json_feature_mean" type="number">
 		</div>
 		<div id="feature_options">
 			<p>lorum ipsum</p>
 			<h3>Options</h3>
 			<p id="feature_options_list">
-				<input id="new_json_feature_option_0">	
+				<input id="new_json_feature_option_0">
 			</p>
 			<p id="remove_option" >
 				<input type="button" onClick="remove_last()" style="background:rgb(255, 100, 100)" value="Remove Last"/>
@@ -161,53 +184,148 @@
 
 <script>
 	var tmp = {}
+	var tmp_options = []
+	var tmp_targets = []
 	function new_model_type(type) {
+		$('#new_json_question').val("");
+		$('#new_json_note').val("");
 		tmp = {}
 		tmp["type"] = type;
-		new_model_question();
-		window.scrollTo(0,0);
-		$('#new_json_question').focus();
-	}
-	function new_model_question() {
-		$('#forget').show();
-		$('#input_question_type').hide();
-		$('#input_question').show();
-		window.scrollTo(0,0);
-		$('#new_json_feature_name').focus();	
 		console.log("Building model...")
 		console.log(tmp)
+		// Leaving here in case I decide to support multiclass regression. See below too.
+		//if (type=="categorical") {
+		//	$('#target_options_list').empty();
+		//	tmp_targets.push("new_json_target_option_0")
+		//	$('#target_options_list').append(`<input id="new_json_feature_option_0">`)
+		//	tmp_targets.push("new_json_target_option_1")
+		//	$('#target_options_list').append(`<input id="new_json_feature_option_1">`)
+		//	$('#forget').show();
+		//	$('#input_question_type').hide();
+		//	$('#input_question').hide();
+		//	$('#input_question_target_options').show();
+		//	window.scrollTo(0,0);
+		//	$('#new_json_question').focus();
+		//} else {
+			$('#forget').show();
+			$('#input_question_type').hide();
+			$('#input_question').show();
+			$('#input_question_target_options').hide();
+			window.scrollTo(0,0);
+			$('#new_json_feature_name').focus();	
+			window.scrollTo(0,0);
+			$('#new_json_question').focus();
+		//}
 	}
 	function new_model_feature(mode=0) {
-		$('#input_question_type').hide();
-		$('#input_question').hide();
-		$('#input_features').show();
-		$('#feature_units').hide();
-		$('#feature_options').hide();
-		$('#feature_next').hide();
-		$("#choose_type").val("choose");
-		window.scrollTo(0,0);
-		$('#new_json_feature_name').focus();	
-		if (mode==0) {	
-			tmp["question"] = $('#new_json_feature_name').val();
-			if ($('#new_json_question').val().trim()!="") {
-				tmp["description"] = $('#new_json_question_note').val();
-			}
-			tmp["features"] = []
-		} else if (mode==1) {
-			feature = {}
-			feature["name"] = $('#new_json_feature_name').val();
-			if ($('#new_json_feature_more').val().trim()!="") {
-				feature["description"] = $('#new_json_feature_more').val();
-			}
-			if ($('#choose_type').val()=="continuous") {
-				feature["type"] = "continuous"
-			} else if ($('#choose_type').val()=="categorical") {
-				feature["type"] = "categorical"
-			}
-			tmp["features"].push(feature)
+		console.log("Adding feature mode: "+mode);
+
+		var error = ""
+
+		if (tmp["type"]=="categorical") {
+			tmp['target'] = {}
+			tmp['target']['possible_answers'] = ['Yes', 'No']
+			// Leaving here in case I decide to support multiclass regression. See above too.
+			//for (x in tmp_targets){
+			//	feature["categories"].push($('#'+tmp_targets[x]).val());
+			//};
 		}
-		console.log("Building model...")
-		console.log(tmp)
+
+		if (mode==0) {	
+			console.log("Add question and description")
+			tmp["question"] = $('#new_json_question').val();
+
+			if (tmp["question"].trim()=="") {
+				error += "You cannot leave the Your Question field blank. ";
+			} else {
+				if ($('#new_json_feature_more').val().trim()!="") {
+					tmp["description"] = $('#new_json_feature_more').val();
+				}
+				tmp["features"] = []
+			}
+
+		} else {
+			console.log("Add feature")
+			var existing_features = tmp["features"].map(a => snake_case(a.name));
+
+			console.log("Check pre-existing features. Is "+snake_case($('#new_json_feature_name').val())+" in ["+ String(tmp["features"].map(a => snake_case(a.name)))+"]?")
+			if (existing_features.includes( snake_case($('#new_json_feature_name').val()) )) {
+				error += "This feature name is too close to an existing feature name. ";
+			}
+			if ($('#new_json_feature_name').val().trim()=="") {
+				error += "You cannot have empty feature name. "
+			}
+
+			error_sub = ""
+			if ($('#choose_type').val()=="categorical") {
+				for (x in tmp_options){
+					if ($('#'+tmp_options[x]).val().trim()==""){
+						error_sub = "You cannot have empty options. "
+					}
+				}
+			} else {
+				if ($('#new_json_feature_units').val().trim()=="") {
+					error += "You cannot leave the Units field empty. ";
+				}
+				if ($('#new_json_feature_lower').val().trim()=="" |
+					$('#new_json_feature_upper').val().trim()=="" |
+					$('#new_json_feature_mean').val().trim()=="" |
+					isNaN($('#new_json_feature_lower').val()*1) | 
+					isNaN($('#new_json_feature_upper').val()*1) | 
+					isNaN($('#new_json_feature_mean').val()*1)) {
+					error += "Lower, Upper, and Mean must all be numbers. ";
+				} 
+			}
+
+			error += error_sub;
+			if (error=="") {
+				feature = {}
+				feature["name"] = $('#new_json_feature_name').val();
+				if ($('#new_json_feature_more').val().trim()!="") {
+					feature["description"] = $('#new_json_feature_more').val();
+				}
+				if ($('#choose_type').val()=="continuous") {
+					feature["type"] = "continuous"
+					feature["units"] = $('#new_json_feature_units').val();
+					feature["lower"] = $('#new_json_feature_lower').val()*1;
+					feature["upper"] = $('#new_json_feature_upper').val()*1;
+					feature["mean"] = $('#new_json_feature_mean').val()*1;
+				} else if ($('#choose_type').val()=="categorical") {
+					feature["type"] = "categorical"
+					feature["categories"] = []
+					feature["weights"] = []
+					for (x in tmp_options){
+						feature["categories"].push($('#'+tmp_options[x]).val());
+						feature["weights"].push(1);
+					};
+				}
+				tmp["features"].push(feature)
+			}
+		}
+
+		if (error!=""){
+			alert(error + "Make changes, and try again.")
+		} else {
+			if (mode!=2) {
+				$('#new_json_feature_name').val("");
+				$('#new_json_feature_more').val("");
+				
+				$('#input_question_type').hide();
+				$('#input_question').hide();
+				$('#input_question_target_options').hide();
+				$('#input_features').show();
+				$('#feature_units').hide();
+				$('#feature_options').hide();
+				$('#feature_next').hide();
+				$("#choose_type").val("choose");
+				window.scrollTo(0,0);
+				$('#new_json_feature_name').focus();	
+				console.log("Building model...")
+				console.log(tmp)
+			}
+		}
+		return error
+
 	}
 	function new_model_feature_type(type) {
 		if (type=="choose"){
@@ -215,12 +333,19 @@
 			$('#feature_options').hide();
 			$('#feature_next').hide();
 		} else if (type=="continuous"){
+			$('#new_json_feature_units').val("");
+			$('#new_json_feature_lower').val("");
+			$('#new_json_feature_upper').val("");
+			$('#new_json_feature_mean').val("");
 			$('#feature_units').show();
 			$('#feature_options').hide();
 			$('#feature_next').show();
 		} else if (type=="categorical") {
 			$('#feature_options_list').empty();
-			$('#feature_options_list').append(`<input>`)
+			tmp_options.push("new_json_feature_option_0")
+			$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
+			tmp_options.push("new_json_feature_option_1")
+			$('#feature_options_list').append(`<input id="new_json_feature_option_1">`)
 			$('#remove_option').hide();
 			$('#feature_units').hide();
 			$('#feature_options').show();
@@ -228,22 +353,90 @@
 			dark_mode();
 			$('#new_json_feature_option_0').focus();		
 		}
-		console.log("Building model...")
-		console.log(tmp)
 	}
 	function add_feature_option() {
-		$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
-		$('#new_json_feature_option_0').focus();		
+		input_id = `new_json_feature_option_`+String(tmp_options.length);
+		$('#feature_options_list').append(`<input id="`+input_id+`">`)
+		$('#'+input_id).focus();		
+		tmp_options.push(input_id)
 		$('#remove_option').show();
 		dark_mode();
 	}
 	function remove_last() {
-		//
+		if (tmp_options.length>=3) {
+			input_id = `new_json_feature_option_`+String(tmp_options.length-1);
+			var index = tmp_options.indexOf(input_id);
+			if (index !== -1) {
+				tmp_options.splice(index, 1);
+			}
+			$('#'+input_id).remove();
+			input_id = `new_json_feature_option_`+String(tmp_options.length-1);
+			$('#'+input_id).focus();
+		} else {
+			alert("You must have at least two options. ")
+		}
+	}
+	function add_target_option() {
+		input_id = `new_json_target_option_`+String(tmp_targets.length);
+		$('#target_options_list').append(`<input id="`+input_id+`">`)
+		$('#'+input_id).focus();		
+		tmp_targets.push(input_id)
+		$('#remove_target_option').show();
+		dark_mode();
+	}
+	function remove_last_target() {
+		if (tmp_targets.length>=3) {
+			input_id = `new_json_target_option_`+String(tmp_targets.length-1);
+			var index = tmp_targets.indexOf(input_id);
+			if (index !== -1) {
+				tmp_targets.splice(index, 1);
+			}
+			$('#'+input_id).remove();
+			input_id = `new_json_target_option_`+String(tmp_targets.length-1);
+			$('#'+input_id).focus();
+		} else {
+			alert("You must have at least two options. ")
+		}
 	}
 	function finalize_model() {
-		console.log("Building model...")
-		console.log(tmp)
-		show_list();
+
+		error = new_model_feature(mode=2);
+
+		if (error=="") {
+			// add coefficents and number et al
+			console.log("Writing coefficients et al.")
+			tmp['training'] = {}
+			tmp['training']['headers'] = []
+			tmp['training']['observations'] = []
+			tmp['training']['headers'].push("recorded_on");
+			tmp['trained_on'] = 0,
+			tmp['coefficients'] = {}
+			tmp["features"].forEach((element,index) => {
+				console.log(element)
+				if (element["type"]=="continuous") {
+					variable_name = snake_case(element["name"]);
+					tmp['coefficients'][variable_name] = 0;
+					tmp['training']['headers'].push(variable_name);
+				} else if (element["type"]=="categorical") {
+					for (cat in element["categories"]) {
+						variable_name = snake_case(element["name"])+`-`+snake_case(element["categories"][cat]);
+						tmp['coefficients'][variable_name] = 0;
+						tmp['training']['headers'].push(variable_name);
+					}
+				}
+			})
+			tmp['training']['headers'].push("target");
+			tmp['training']['headers'].push("note");
+			tmp['coefficients']['intercept'] = 0;
+			tmp['performance'] = {}
+			console.log("Building model...")
+			console.log(tmp)
+			var question_arr = JSON.parse(localStorage.questions)
+			question_arr.unshift(tmp);
+			localStorage.questions = JSON.stringify(question_arr)
+			show_list();
+		}
+
 	}
 </script>
 
@@ -484,7 +677,14 @@ function show_lib() {
 		$('#list').empty();
 		i = 0;
 		for (question in library) {
-			$('#list').append(`<div class="list_item" onclick="load_lib_model(`+i+`);show_list();"><div style="float:right;height:100%;padding:0 0px 15px 15px;"><span class="plus">+</span></div>Add <b><i>`+library[question]["question"]+`</i></b> to <i>Models</i></div>`);
+
+			if (!(typeof library[question]["description"] === 'undefined')) {
+				description = library[question]["description"];
+			} else {
+				description = "";
+			}
+
+			$('#list').append(`<div class="list_item" onclick="load_lib_model(`+i+`);show_list();"><div style="float:right;height:100%;padding:0 0px 15px 15px;"><span class="plus">+</span></div>Add <b><i>`+library[question]["question"]+`</i></b> to <i>Models</i>. `+description+`</div>`);
 			i+=1;
 		}
 		$('#list').append(`<div class="button_container" style="padding:0 15px;"><a href="javascript:void('')" onClick="make_new();" class="button">New Model</a></div>`);
@@ -528,6 +728,7 @@ function make_new() {
 		$('#tos').hide();
 		$('#list_screen').hide();
 		$('#new_model_screen').show();
+		$('#input_question_target_options').hide();
 		$('#build_new').hide();
 		$('#run').hide();
 		$('#ground_truth_screen').hide();	
@@ -621,8 +822,14 @@ function show_model() {
 	features.forEach((element,index) => {
 			html += `<div class="feature">`;
 			if (element["type"]=="continuous") {
+				tail_diff = element["upper"] - element["mean"];
+				if (tail_diff< (element["mean"] - element["lower"])) {
+					tail_diff = element["mean"] - element["lower"];
+				}
+				est_std = tail_diff/3
+				step_size = 10**(Number.parseFloat(est_std).toExponential(2).split("e")[1]-2);
 				html += `<b>`+(index+1)+`) `+element["name"]+`:</b>	<span id="`+snake_case(element["name"])+`">`+feature_values[snake_case(element["name"])]+`</span> (<span id="`+snake_case(element["name"])+`_units">`+element["units"]+`</span>)<p>`;
-				html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+feature_values[snake_case(element["name"])]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();">`;
+				html += `<input type="range" min="`+element["lower"]+`" max="`+element["upper"]+`" value="`+feature_values[snake_case(element["name"])]+`" class="slider" id="myRange" class="slider" oninput="$('#`+snake_case(element["name"])+`').html(this.value);run_model();" step="`+step_size+`">`;
 			} else if (element["type"]=="categorical") {
 				html += `<b>`+(index+1)+`) `+element["name"]+`:</b><p>`;			
 				html += `<select id="`+snake_case(element["name"])+`" oninput="run_model();">`;
@@ -765,7 +972,7 @@ function ground_truth() {
 	} else if (model["type"]=="categorical"){
 		html += `<select id="target" style="width:100%">`;
 		for (x in model["target"]["possible_answers"]) {
-			html += `<option>`+model["target"]["possible_answers"][x]+`</option>`;
+			html += `<option value='`+model["target"]["possible_answers"][x]+`'>`+model["target"]["possible_answers"][x]+`</option>`;
 		}
 		html += `</select>`;
 	}
@@ -804,143 +1011,117 @@ function ground_truth() {
 function save_obs(mode=1) {
 	console.log("Save Observations")
 
-	models = JSON.parse(localStorage.questions)
-	model = models[0]
-	headers = model["training"]["headers"]
-	feature_values = JSON.parse(localStorage.feature_values);
-	feature_values["recorded_on"] = new Date().toISOString().split('T')[0];
-	feature_values["target"] = $('#target').val();
+	if ($('#target').val().trim()=="") {
+		alert("There is a problem with your target value. Check it and try again. ")
+		return false
+	} else {
 
-	row = []
-	for (column in headers) {
-		if (!headers[column].includes("-")) {
-			row.push(feature_values[headers[column]])
-		} else {
-			if (headers[column].split("-")[1]==feature_values[headers[column].split("-")[0]]) {
-				row.push(1)
+		models = JSON.parse(localStorage.questions)
+		model = models[0]
+		headers = model["training"]["headers"]
+		feature_values = JSON.parse(localStorage.feature_values);
+		feature_values["recorded_on"] = new Date().toISOString().split('T')[0];
+		feature_values["target"] = $('#target').val();
+
+		row = []
+		for (column in headers) {
+			if (!headers[column].includes("-")) {
+				if (feature_values[headers[column]]*1) {
+					row.push(feature_values[headers[column]]*1)
+				} else {
+					row.push(feature_values[headers[column]])
+				}
 			} else {
-				row.push(0)
+				if (headers[column].split("-")[1]==feature_values[headers[column].split("-")[0]]) {
+					row.push(1)
+				} else {
+					row.push(0)
+				}
 			}
 		}
+		
+		console.log("Saving ground truth...")
+		console.log("Headers: "+headers.join(","))
+		console.log("Values: ")
+		console.log(row)
+
+		model["training"]["observations"].push(row) 
+		models[0] = model
+		localStorage.questions = JSON.stringify(models);
+
+		localStorage.removeItem('feature_values');
+		mem_usage();
+
+		if (mode==1) {
+			load_model();
+			show_model();
+		}
+		return true
 	}
-	
-	console.log("Saving ground truth...")
-	console.log("Headers: "+headers.join(","))
-	console.log("Values: ")
-	console.log(row)
 
-	model["training"]["observations"].push(row) 
-	models[0] = model
-	localStorage.questions = JSON.stringify(models);
-
-	localStorage.removeItem('feature_values');
-	mem_usage();
-
-	if (mode==1) {
-		load_model();
-		show_model();
-	}
 }
 
 function save_and_train(mode=0) {
 	console.log("Save and Train")
 
-	save_changes();
-
-	$('#spinner_here').empty();
-	if (localStorage.dark_mode==1) {
-		tickcolor = '#ddd';		
+	if (mode==0) {
+		go = save_obs();
 	} else {
-		tickcolor = '#000';		
+		go = 1;
 	}
-	start_spinner('spinner_here',tickcolor);
 
-	$('#about').hide();
-	$('#tos').hide();
-	$('#list_screen').hide();
-	$('#new_model_screen').hide();
-	$('#build_new').hide();
-	$('#run').hide();
-	$('#ground_truth_screen').hide();	
-	$('#training').show();	
-	$('#edit_screen').hide();
-	//localStorage.screen = "run";
-	$('#models_link').hide();
-	$('#models_link').css('text-decoration', 'underline');
-	$('#models_link').css('font-weight', 'normal');
-	$('#new_mod').hide();
-	$('#upload_link').hide();
-	$('#down_mod').hide();
-	$('#run_mod').hide();
-	$('#edit_mod').hide();
+	if (go) {
+		save_changes();
 
-	passed = train_model();
-
-	setTimeout(function(){
-		if (!passed) {
-			alert("Unable to build model! Any observations have been saved, but more data is needed. Add more and try again.")
+		$('#spinner_here').empty();
+		if (localStorage.dark_mode==1) {
+			tickcolor = '#ddd';		
 		} else {
-			save_changes();
+			tickcolor = '#000';		
 		}
-		load_model();
-		if (mode==0) {
-			show_model();
-		} else {
-			show_edit();
-		}
-	},1000);
+		start_spinner('spinner_here',tickcolor);
 
-}
+		$('#about').hide();
+		$('#tos').hide();
+		$('#list_screen').hide();
+		$('#new_model_screen').hide();
+		$('#build_new').hide();
+		$('#run').hide();
+		$('#ground_truth_screen').hide();	
+		$('#training').show();	
+		$('#edit_screen').hide();
+		//localStorage.screen = "run";
+		$('#models_link').hide();
+		$('#models_link').css('text-decoration', 'underline');
+		$('#models_link').css('font-weight', 'normal');
+		$('#new_mod').hide();
+		$('#upload_link').hide();
+		$('#down_mod').hide();
+		$('#run_mod').hide();
+		$('#edit_mod').hide();
 
-function run_model(){
-	console.log("Run/Update Model")
-	
-	feature_values = JSON.parse(localStorage.feature_values);
-	model = JSON.parse(localStorage.questions)[0]
-	equation = "";
-	output = 0;
-	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
-	for (const [key, value] of Object.entries(coefficients)) {
-		if (key=="intercept") {
-			//console.log(String(key)+value);
-			output += value
-			equation += String(value)
-		} else if (!key.includes("-")) {
-			//console.log(String(key)+($('#'+key).html())*value*1);
-			output += ($('#'+key).html())*value*1
-			equation += "("+String(($('#'+key).html()))+")("+String(value)+") + ";
-			feature_values[key] = $('#'+key).html()*1
-		} else {
-			if ($('#'+key.split("-")[0]).val().toLowerCase()==key.split("-")[1].toLowerCase()) {
-				output += 1*value
-				equation += "(1)("+String(value)+") + "
+		passed = train_model();
+
+		setTimeout(function(){
+			if (!passed) {
+				if (mode==0) {
+					alert("Unable to build model! Any observations have been saved, but more data is needed. Add more and try again.")
+				} else {
+					alert("Unable to build model! More observationsa are needed. Add more and try again.")
+				}
 			} else {
-				output += 0
-				equation += "(0)("+String(value)+") + "
+				save_changes();
 			}
-			feature_values[key.split("-")[0]] = $('#'+key.split("-")[0]).val();
-		}
-	}
-	feature_values["note"] = $('#note').val();
-	
-	if (model["type"]=="continuous") {
-		output = output;
-		equation = String(output) + " = "  + equation;
-	} else if (model["type"]=="categorical") {
-		output = 100 / (1 + Math.E**(-1*output));
-		equation = String(output) + " = (100)(1 /(1 + e^(-("  + equation + "))))";
-	}	
-
-	localStorage.feature_values = JSON.stringify(feature_values);
-
-	//console.log(equation);
-	output = Math.round(output*100)/100;
-	if (model["type"]=="continuous") {
-		$('#prediction_text').html(output+"<sup>&dagger;</sup>");
-	} else if (model["type"]=="categorical") {
-		$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+			load_model();
+			if (mode==0) {
+				show_model();
+			} else {
+				show_edit();
+			}
+		},1000);
 	}
 }
+
 
 
 function show_edit() {
@@ -1017,7 +1198,8 @@ function load_lib_model(n=0){
 }
 
 function snake_case(text){
-	text = text.replace(/[^a-zA-Z]/g,"_");
+	text = text.trim()
+	text = text.replace(/[^a-zA-Z0-9]/g,"_");
 	text = text.replace(/_+/g,"_");
 	text = text.replace(/^_+|_+$/g, '');
 	return text
@@ -1159,6 +1341,17 @@ control.addEventListener("change", function(event){
 // Custom keypress events
 //===========================================
 
+var mouseDown = 0;
+document.body.onmousedown = function() { 
+  ++mouseDown;
+}
+document.body.onmouseup = function() {
+  --mouseDown;
+  if (localStorage.screen=="run") {
+	  console.log(equation)
+  }
+}
+
 $('#reply').keypress(function(e){
 	if(e.keyCode == 13 && !e.shiftKey) {
 		e.preventDefault();
@@ -1271,81 +1464,148 @@ function wrangle() {
 	for(var i=0; i<data.length; i++){
 		row = data[i]
 		j = row.length-1;
-		if (row[j].toLowerCase()=="yes") {
-			data[i][j] = 1;
-		} else if (row[j].toLowerCase()=="no") {
-			data[i][j] = 0;
+		if (typeof row[j] == "string") {
+			if (row[j].toLowerCase()=="yes") {
+				data[i][j] = 1;
+			} else if (row[j].toLowerCase()=="no") {
+				data[i][j] = 0;
+			}
 		}
 	}
 	return data
 }
 
-
+var r_model;
+var regression;
+var logistic;
 function train_model(mode=0){
 	console.log("Train Model")
 
-	models = JSON.parse(localStorage.questions)
-	this_model = models[0]
+	try {
+			
+		models = JSON.parse(localStorage.questions)
+		this_model = models[0]
 
-	data = wrangle();
-	
-	console.log("Type: "+this_model["type"])
-	console.log(data)
-
-	// https://github.com/chen0040/js-regression
-
-	if (this_model["type"]=="continuous") {
-		console.log("Linear Regressions")
-		// === Create the linear regression === //
-		var regression = new jsregression.LinearRegression({
-			alpha: 0.00000001, // 
-			iterations: 3000,
-			lambda: 0.0,
-			trace: false
-		});
-
-		// === Train the linear regression === //
-		var r_model = regression.fit(data);
-	} else if (this_model["type"]=="categorical") {
-		console.log("Logistic Regressions")
-		// === Create the logistic regression === //
-		var logistic = new jsregression.LogisticRegression({
-			alpha: 0.00000001,
-			iterations: 3000,
-			lambda: 0.0
-		});
-
-		// === Train the logistic regression === //
-		var r_model = logistic.fit(data);		
-	}
-
-	if (r_model["theta"][0]) {
-		headers = [JSON.parse(localStorage.questions)[0]["training"]["headers"]]
-		var removeIndexes = [0,headers[0].length-2,headers[0].length-1]
-		headers = headers.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
+		data = wrangle();
 		
-		//headers[0].unshift("intercept")
-		headers[0].push("intercept")
-		
-		console.log(data.length);
-		coefficients = {}
-		for (feature in headers[0]){
-			coefficients[headers[0][feature]] = r_model["theta"][feature];
+		console.log("Type: "+this_model["type"])
+		console.log(data)
+
+		// https://github.com/chen0040/js-regression
+
+		if (this_model["type"]=="continuous") {
+			console.log("Linear Regressions")
+			// === Create the linear regression === //
+			regression = new jsregression.LinearRegression({
+				alpha: 0.0001, // 
+				iterations: 1000,
+				lambda: 0.0
+			});
+
+			// === Train the linear regression === //
+			r_model = regression.fit(data);
+		} else if (this_model["type"]=="categorical") {
+			console.log("Logistic Regressions")
+			// === Create the logistic regression === //
+			logistic = new jsregression.LogisticRegression({
+				alpha: 0.0001,
+				iterations: 1000,
+				lambda: 0.0
+			});
+
+			// === Train the logistic regression === //
+			r_model = logistic.fit(data);		
 		}
 
-		models[0]["trained_on"] = data.length
-		models[0]["coefficients"] = coefficients
+		if (r_model["theta"][0]) {
+			headers = [JSON.parse(localStorage.questions)[0]["training"]["headers"]]
+			var removeIndexes = [0,headers[0].length-2,headers[0].length-1]
+			headers = headers.map(v => v.filter((_, i) => !removeIndexes.includes(i)))
+			
+			headers[0].unshift("intercept")
+			//headers[0].push("intercept")
+			
+			console.log(data.length);
+			coefficients = {}
+			for (feature in headers[0]){
+				coefficients[headers[0][feature]] = r_model["theta"][feature];
+			}
 
-		$('#model_json').val(JSON.stringify(models[0], null, 2));
-		localStorage.question = JSON.stringify(models);
+			models[0]["trained_on"] = data.length
+			models[0]["coefficients"] = coefficients
 
-		return true
-	} else {
-		return false
+			$('#model_json').val(JSON.stringify(models[0], null, 2));
+			localStorage.question = JSON.stringify(models);
+
+			return true
+		} else {
+			return false
+		}
+	} catch (error) {
+		return false		
 	}
 
 }
 
+var equation;
+function run_model(){
+	console.log("Run/Update Model")
+	
+	feature_values = JSON.parse(localStorage.feature_values);
+	model = JSON.parse(localStorage.questions)[0]
+	equation = "";
+	output = 0;
+	output_array = []
+	coefficients = JSON.parse(localStorage.questions)[0]["coefficients"];
+	for (const [key, value] of Object.entries(coefficients)) {
+		if (key=="intercept") {
+			//console.log(String(key)+value);
+			output += value
+			equation += String(value)
+		} else if (!key.includes("-")) {
+			//console.log(String(key)+($('#'+key).html())*value*1);
+			output += ($('#'+key).html())*value*1
+			output_array.push(($('#'+key).html())*value*1)
+			equation += " + ("+String(($('#'+key).html()))+")("+String(value)+")";
+			feature_values[key] = $('#'+key).html()*1
+		} else {
+			if ($('#'+key.split("-")[0]).val().toLowerCase()==key.split("-")[1].toLowerCase()) {
+				output += 1*value
+				output_array.push(1*value)
+				equation += " + (1)("+String(value)+")"
+			} else {
+				output += 0
+				output_array.push(0)
+				equation += " + (0)("+String(value)+")"
+			}
+			feature_values[key.split("-")[0]] = $('#'+key.split("-")[0]).val();
+		}
+	}
+	feature_values["note"] = $('#note').val();
+	
+	if (model["type"]=="continuous") {
+		output = output;
+		equation = String(output) + " = "  + equation;
+	} else if (model["type"]=="categorical") {
+		output = 100 / (1 + Math.E**(-1*output));
+		equation = String(output) + " = (100)(1 /(1 + e^(-(" + equation + "))))";
+	}	
+
+	localStorage.feature_values = JSON.stringify(feature_values);
+
+	if (model["trained_on"]>0) {
+		if (model["type"]=="continuous") {
+			output = Math.round(output*100)/100;
+			$('#prediction_text').html(output+"<sup>&dagger;</sup>");
+		} else if (model["type"]=="categorical") {
+			output = Math.round(output*100)/100;
+			$('#prediction_text').html("Yes ("+output+"%)<sup>&dagger;</sup>");
+		}
+	}
+
+	//console.log(equation);
+
+}
 
 </script>
 

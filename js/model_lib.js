@@ -1,5 +1,6 @@
 library = [ 
     {'question': 'Will it rain tomorrow?',
+    'description' : 'observe and predict',
     'type': 'categorical',
     'features': [
                     {
