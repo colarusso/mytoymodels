@@ -864,16 +864,22 @@ function show_model() {
 			</p>
 			<p>
 				<sup>&dagger;</sup>
-				Here's the regression behind this prediction:
-
-				<div id="regression" class="regression">`
+				Here's the `
+				
+				 
 
 	model_html = ``
 	if (model["type"]=="continuous") {
+		html += `<a href="https://en.wikipedia.org/wiki/Linear_regression" target="_blank" class="body_links">linear regression</a>`
 		model_html += `\\[y = B_0`;
 	} else if (model["type"]=="categorical") {
+		html += `<a href="https://en.wikipedia.org/wiki/Logistic_regression" target="_blank" class="body_links">logistic regression</a>`
 		model_html += `\\[p(x) = {{1} \\over {1 + e^{-1(B_0`
 	}	
+
+	html += ` behind this prediction:
+
+				<div id="regression" class="regression">`
 	
 	given_html = ``;
 	if (model["type"]=="continuous") {
