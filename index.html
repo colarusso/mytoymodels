@@ -183,264 +183,6 @@
 	</div>
 </div>
 
-<script>
-	var tmp = {}
-	var tmp_options = []
-	var tmp_targets = []
-	function new_model_type(type) {
-		$('#new_json_question').val("");
-		$('#new_json_note').val("");
-		tmp = {}
-		tmp["type"] = type;
-		console.log("Building model...")
-		console.log(tmp)
-		// Leaving here in case I decide to support multiclass regression. See below too.
-		//if (type=="categorical") {
-		//	$('#target_options_list').empty();
-		//	tmp_targets.push("new_json_target_option_0")
-		//	$('#target_options_list').append(`<input id="new_json_feature_option_0">`)
-		//	tmp_targets.push("new_json_target_option_1")
-		//	$('#target_options_list').append(`<input id="new_json_feature_option_1">`)
-		//	$('#forget').show();
-		//	$('#input_question_type').hide();
-		//	$('#input_question').hide();
-		//	$('#input_question_target_options').show();
-		//	window.scrollTo(0,0);
-		//	$('#new_json_question').focus();
-		//} else {
-			$('#forget').show();
-			$('#input_question_type').hide();
-			$('#input_question').show();
-			$('#input_question_target_options').hide();
-			window.scrollTo(0,0);
-			$('#new_json_feature_name').focus();	
-			window.scrollTo(0,0);
-			$('#new_json_question').focus();
-		//}
-	}
-	function new_model_feature(mode=0) {
-		console.log("Adding feature mode: "+mode);
-
-		var error = ""
-
-		if (tmp["type"]=="categorical") {
-			tmp['target'] = {}
-			tmp['target']['possible_answers'] = ['Yes', 'No']
-			// Leaving here in case I decide to support multiclass regression. See above too.
-			//for (x in tmp_targets){
-			//	feature["categories"].push($('#'+tmp_targets[x]).val());
-			//};
-		}
-
-		if (mode==0) {	
-			console.log("Add question and description")
-			tmp["question"] = $('#new_json_question').val();
-
-			if (tmp["question"].trim()=="") {
-				error += "You cannot leave the Your Question field blank. ";
-			} else {
-				if ($('#new_json_note').val().trim()!="") {
-					tmp["description"] = $('#new_json_note').val();
-				}
-				tmp["features"] = []
-			}
-
-		} else {
-			console.log("Add feature")
-			var existing_features = tmp["features"].map(a => snake_case(a.name));
-
-			console.log("Check pre-existing features. Is "+snake_case($('#new_json_feature_name').val())+" in ["+ String(tmp["features"].map(a => snake_case(a.name)))+"]?")
-			if (existing_features.includes( snake_case($('#new_json_feature_name').val()) )) {
-				error += "This feature name is too close to an existing feature name. ";
-			}
-			if ($('#new_json_feature_name').val().trim()=="") {
-				error += "You cannot have empty feature name. "
-			}
-
-			error_sub = ""
-			if ($('#choose_type').val()=="categorical") {
-				for (x in tmp_options){
-					if ($('#'+tmp_options[x]).val().trim()==""){
-						error_sub = "You cannot have empty options. "
-					}
-				}
-			} else {
-				if ($('#new_json_feature_units').val().trim()=="") {
-					error += "You cannot leave the Units field empty. ";
-				}
-				if ($('#new_json_feature_lower').val().trim()=="" |
-					$('#new_json_feature_upper').val().trim()=="" |
-					$('#new_json_feature_mean').val().trim()=="" |
-					isNaN($('#new_json_feature_lower').val()*1) | 
-					isNaN($('#new_json_feature_upper').val()*1) | 
-					isNaN($('#new_json_feature_mean').val()*1)) {
-					error += "Lower, Upper, and Mean must all be numbers. ";
-				} 
-			}
-
-			error += error_sub;
-			if (error=="") {
-				feature = {}
-				feature["name"] = $('#new_json_feature_name').val();
-				if ($('#new_json_feature_more').val().trim()!="") {
-					feature["description"] = $('#new_json_feature_more').val();
-				}
-				if ($('#choose_type').val()=="continuous") {
-					feature["type"] = "continuous"
-					feature["units"] = $('#new_json_feature_units').val();
-					feature["lower"] = $('#new_json_feature_lower').val()*1;
-					feature["upper"] = $('#new_json_feature_upper').val()*1;
-					feature["mean"] = $('#new_json_feature_mean').val()*1;
-				} else if ($('#choose_type').val()=="categorical") {
-					feature["type"] = "categorical"
-					feature["categories"] = []
-					feature["weights"] = []
-					for (x in tmp_options){
-						feature["categories"].push($('#'+tmp_options[x]).val());
-						feature["weights"].push(1);
-					};
-				}
-				tmp["features"].push(feature)
-			}
-		}
-
-		if (error!=""){
-			alert(error + "Make changes, and try again.")
-		} else {
-			if (mode!=2) {
-				$('#new_json_feature_name').val("");
-				$('#new_json_feature_more').val("");
-
-				$('#input_question_type').hide();
-				$('#input_question').hide();
-				$('#input_question_target_options').hide();
-				$('#input_features').show();
-				$('#feature_units').hide();
-				$('#feature_options').hide();
-				$('#feature_next').hide();
-				$("#choose_type").val("choose");
-				window.scrollTo(0,0);
-				$('#new_json_feature_name').focus();	
-				console.log("Building model...")
-				console.log(tmp)
-			}
-		}
-		return error
-
-	}
-	function new_model_feature_type(type) {
-		if (type=="choose"){
-			$('#feature_units').hide();
-			$('#feature_options').hide();
-			$('#feature_next').hide();
-		} else if (type=="continuous"){
-			$('#new_json_feature_units').val("");
-			$('#new_json_feature_lower').val("");
-			$('#new_json_feature_upper').val("");
-			$('#new_json_feature_mean').val("");
-			$('#feature_units').show();
-			$('#feature_options').hide();
-			$('#feature_next').show();
-		} else if (type=="categorical") {
-			$('#feature_options_list').empty();
-			tmp_options = ["new_json_feature_option_0"];
-			$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
-			tmp_options.push("new_json_feature_option_1")
-			$('#feature_options_list').append(`<input id="new_json_feature_option_1">`)
-			$('#remove_option').hide();
-			$('#feature_units').hide();
-			$('#feature_options').show();
-			$('#feature_next').show();
-			dark_mode();
-			$('#new_json_feature_option_0').focus();		
-		}
-	}
-	function add_feature_option() {
-		input_id = `new_json_feature_option_`+String(tmp_options.length);
-		$('#feature_options_list').append(`<input id="`+input_id+`">`)
-		$('#'+input_id).focus();		
-		tmp_options.push(input_id)
-		$('#remove_option').show();
-		dark_mode();
-	}
-	function remove_last() {
-		if (tmp_options.length>=3) {
-			input_id = `new_json_feature_option_`+String(tmp_options.length-1);
-			var index = tmp_options.indexOf(input_id);
-			if (index !== -1) {
-				tmp_options.splice(index, 1);
-			}
-			$('#'+input_id).remove();
-			input_id = `new_json_feature_option_`+String(tmp_options.length-1);
-			$('#'+input_id).focus();
-		} else {
-			alert("You must have at least two options. ")
-		}
-	}
-	function add_target_option() {
-		input_id = `new_json_target_option_`+String(tmp_targets.length);
-		$('#target_options_list').append(`<input id="`+input_id+`">`)
-		$('#'+input_id).focus();		
-		tmp_targets.push(input_id)
-		$('#remove_target_option').show();
-		dark_mode();
-	}
-	function remove_last_target() {
-		if (tmp_targets.length>=3) {
-			input_id = `new_json_target_option_`+String(tmp_targets.length-1);
-			var index = tmp_targets.indexOf(input_id);
-			if (index !== -1) {
-				tmp_targets.splice(index, 1);
-			}
-			$('#'+input_id).remove();
-			input_id = `new_json_target_option_`+String(tmp_targets.length-1);
-			$('#'+input_id).focus();
-		} else {
-			alert("You must have at least two options. ")
-		}
-	}
-	function finalize_model() {
-
-		error = new_model_feature(mode=2);
-
-		if (error=="") {
-			// add coefficents and number et al
-			console.log("Writing coefficients et al.")
-			tmp['training'] = {}
-			tmp['training']['headers'] = []
-			tmp['training']['observations'] = []
-			tmp['training']['headers'].push("recorded_on");
-			tmp['trained_on'] = 0,
-			tmp['coefficients'] = {}
-			tmp["features"].forEach((element,index) => {
-				console.log(element)
-				if (element["type"]=="continuous") {
-					variable_name = snake_case(element["name"]);
-					tmp['coefficients'][variable_name] = 0;
-					tmp['training']['headers'].push(variable_name);
-				} else if (element["type"]=="categorical") {
-					for (cat in element["categories"]) {
-						variable_name = snake_case(element["name"])+`-`+snake_case(element["categories"][cat]);
-						tmp['coefficients'][variable_name] = 0;
-						tmp['training']['headers'].push(variable_name);
-					}
-				}
-			})
-			tmp['training']['headers'].push("target");
-			tmp['training']['headers'].push("note");
-			tmp['coefficients']['intercept'] = 0;
-			tmp['performance'] = {}
-			console.log("Building model...")
-			console.log(tmp)
-			var question_arr = JSON.parse(localStorage.questions)
-			question_arr.unshift(tmp);
-			localStorage.questions = JSON.stringify(question_arr)
-			show_list();
-		}
-
-	}
-</script>
-
 <div id="run">
 	<div id="prediction" class="prediction">
 		<h1 id="question_text">Loading...</h1>
@@ -492,6 +234,15 @@
 
 <script type="text/javascript">
 
+var changes = 0;
+$(window).bind('beforeunload', function(){
+  if (changes==1) {
+    return 'Are you sure you want to leave? Changes will not be saved.';
+  } else {
+	return undefined
+  }
+});
+
 function rethinkWindowSize() {
 	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px');
 	$('#features_wrapper').scrollTop(0);
@@ -540,6 +291,262 @@ function dark_mode(change=null){
 		$("input,textarea,select,.regression").css('opacity', 1) 
 		localStorage.dark_mode = 0;
 	}
+}
+
+var tmp = {}
+var tmp_options = []
+var tmp_targets = []
+function new_model_type(type) {
+	$('#new_json_question').val("");
+	$('#new_json_note').val("");
+	tmp = {}
+	tmp["type"] = type;
+	console.log("Building model...")
+	console.log(tmp)
+	// Leaving here in case I decide to support multiclass regression. See below too.
+	//if (type=="categorical") {
+	//	$('#target_options_list').empty();
+	//	tmp_targets.push("new_json_target_option_0")
+	//	$('#target_options_list').append(`<input id="new_json_feature_option_0">`)
+	//	tmp_targets.push("new_json_target_option_1")
+	//	$('#target_options_list').append(`<input id="new_json_feature_option_1">`)
+	//	$('#forget').show();
+	//	$('#input_question_type').hide();
+	//	$('#input_question').hide();
+	//	$('#input_question_target_options').show();
+	//	window.scrollTo(0,0);
+	//	$('#new_json_question').focus();
+	//} else {
+		$('#forget').show();
+		$('#input_question_type').hide();
+		$('#input_question').show();
+		$('#input_question_target_options').hide();
+		window.scrollTo(0,0);
+		$('#new_json_feature_name').focus();	
+		window.scrollTo(0,0);
+		$('#new_json_question').focus();
+	//}
+}
+function new_model_feature(mode=0) {
+	console.log("Adding feature mode: "+mode);
+
+	var error = ""
+
+	if (tmp["type"]=="categorical") {
+		tmp['target'] = {}
+		tmp['target']['possible_answers'] = ['Yes', 'No']
+		// Leaving here in case I decide to support multiclass regression. See above too.
+		//for (x in tmp_targets){
+		//	feature["categories"].push($('#'+tmp_targets[x]).val());
+		//};
+	}
+
+	if (mode==0) {	
+		console.log("Add question and description")
+		tmp["question"] = $('#new_json_question').val();
+
+		if (tmp["question"].trim()=="") {
+			error += "You cannot leave the Your Question field blank. ";
+		} else {
+			if ($('#new_json_note').val().trim()!="") {
+				tmp["description"] = $('#new_json_note').val();
+			}
+			tmp["features"] = []
+		}
+
+	} else {
+		console.log("Add feature")
+		var existing_features = tmp["features"].map(a => snake_case(a.name));
+
+		console.log("Check pre-existing features. Is "+snake_case($('#new_json_feature_name').val())+" in ["+ String(tmp["features"].map(a => snake_case(a.name)))+"]?")
+		if (existing_features.includes( snake_case($('#new_json_feature_name').val()) )) {
+			error += "This feature name is too close to an existing feature name. ";
+		}
+		if ($('#new_json_feature_name').val().trim()=="") {
+			error += "You cannot have empty feature name. "
+		}
+
+		error_sub = ""
+		if ($('#choose_type').val()=="categorical") {
+			for (x in tmp_options){
+				if ($('#'+tmp_options[x]).val().trim()==""){
+					error_sub = "You cannot have empty options. "
+				}
+			}
+		} else {
+			if ($('#new_json_feature_units').val().trim()=="") {
+				error += "You cannot leave the Units field empty. ";
+			}
+			if ($('#new_json_feature_lower').val().trim()=="" |
+				$('#new_json_feature_upper').val().trim()=="" |
+				$('#new_json_feature_mean').val().trim()=="" |
+				isNaN($('#new_json_feature_lower').val()*1) | 
+				isNaN($('#new_json_feature_upper').val()*1) | 
+				isNaN($('#new_json_feature_mean').val()*1)) {
+				error += "Lower, Upper, and Mean must all be numbers. ";
+			} 
+		}
+
+		error += error_sub;
+		if (error=="") {
+			feature = {}
+			feature["name"] = $('#new_json_feature_name').val();
+			if ($('#new_json_feature_more').val().trim()!="") {
+				feature["description"] = $('#new_json_feature_more').val();
+			}
+			if ($('#choose_type').val()=="continuous") {
+				feature["type"] = "continuous"
+				feature["units"] = $('#new_json_feature_units').val();
+				feature["lower"] = $('#new_json_feature_lower').val()*1;
+				feature["upper"] = $('#new_json_feature_upper').val()*1;
+				feature["mean"] = $('#new_json_feature_mean').val()*1;
+			} else if ($('#choose_type').val()=="categorical") {
+				feature["type"] = "categorical"
+				feature["categories"] = []
+				feature["weights"] = []
+				for (x in tmp_options){
+					feature["categories"].push($('#'+tmp_options[x]).val());
+					feature["weights"].push(1);
+				};
+			}
+			tmp["features"].push(feature)
+		}
+	}
+
+	if (error!=""){
+		alert(error + "Make changes, and try again.")
+	} else {
+		if (mode!=2) {
+			$('#new_json_feature_name').val("");
+			$('#new_json_feature_more').val("");
+
+			$('#input_question_type').hide();
+			$('#input_question').hide();
+			$('#input_question_target_options').hide();
+			$('#input_features').show();
+			$('#feature_units').hide();
+			$('#feature_options').hide();
+			$('#feature_next').hide();
+			$("#choose_type").val("choose");
+			window.scrollTo(0,0);
+			$('#new_json_feature_name').focus();	
+			console.log("Building model...")
+			console.log(tmp)
+		}
+	}
+	return error
+
+}
+function new_model_feature_type(type) {
+	if (type=="choose"){
+		$('#feature_units').hide();
+		$('#feature_options').hide();
+		$('#feature_next').hide();
+	} else if (type=="continuous"){
+		$('#new_json_feature_units').val("");
+		$('#new_json_feature_lower').val("");
+		$('#new_json_feature_upper').val("");
+		$('#new_json_feature_mean').val("");
+		$('#feature_units').show();
+		$('#feature_options').hide();
+		$('#feature_next').show();
+	} else if (type=="categorical") {
+		$('#feature_options_list').empty();
+		tmp_options = ["new_json_feature_option_0"];
+		$('#feature_options_list').append(`<input id="new_json_feature_option_0">`)
+		tmp_options.push("new_json_feature_option_1")
+		$('#feature_options_list').append(`<input id="new_json_feature_option_1">`)
+		$('#remove_option').hide();
+		$('#feature_units').hide();
+		$('#feature_options').show();
+		$('#feature_next').show();
+		dark_mode();
+		$('#new_json_feature_option_0').focus();		
+	}
+}
+function add_feature_option() {
+	input_id = `new_json_feature_option_`+String(tmp_options.length);
+	$('#feature_options_list').append(`<input id="`+input_id+`">`)
+	$('#'+input_id).focus();		
+	tmp_options.push(input_id)
+	$('#remove_option').show();
+	dark_mode();
+}
+function remove_last() {
+	if (tmp_options.length>=3) {
+		input_id = `new_json_feature_option_`+String(tmp_options.length-1);
+		var index = tmp_options.indexOf(input_id);
+		if (index !== -1) {
+			tmp_options.splice(index, 1);
+		}
+		$('#'+input_id).remove();
+		input_id = `new_json_feature_option_`+String(tmp_options.length-1);
+		$('#'+input_id).focus();
+	} else {
+		alert("You must have at least two options. ")
+	}
+}
+function add_target_option() {
+	input_id = `new_json_target_option_`+String(tmp_targets.length);
+	$('#target_options_list').append(`<input id="`+input_id+`">`)
+	$('#'+input_id).focus();		
+	tmp_targets.push(input_id)
+	$('#remove_target_option').show();
+	dark_mode();
+}
+function remove_last_target() {
+	if (tmp_targets.length>=3) {
+		input_id = `new_json_target_option_`+String(tmp_targets.length-1);
+		var index = tmp_targets.indexOf(input_id);
+		if (index !== -1) {
+			tmp_targets.splice(index, 1);
+		}
+		$('#'+input_id).remove();
+		input_id = `new_json_target_option_`+String(tmp_targets.length-1);
+		$('#'+input_id).focus();
+	} else {
+		alert("You must have at least two options. ")
+	}
+}
+function finalize_model() {
+
+	error = new_model_feature(mode=2);
+
+	if (error=="") {
+		// add coefficents and number et al
+		console.log("Writing coefficients et al.")
+		tmp['training'] = {}
+		tmp['training']['headers'] = []
+		tmp['training']['observations'] = []
+		tmp['training']['headers'].push("recorded_on");
+		tmp['trained_on'] = 0,
+		tmp['coefficients'] = {}
+		tmp["features"].forEach((element,index) => {
+			console.log(element)
+			if (element["type"]=="continuous") {
+				variable_name = snake_case(element["name"]);
+				tmp['coefficients'][variable_name] = 0;
+				tmp['training']['headers'].push(variable_name);
+			} else if (element["type"]=="categorical") {
+				for (cat in element["categories"]) {
+					variable_name = snake_case(element["name"])+`-`+snake_case(element["categories"][cat]);
+					tmp['coefficients'][variable_name] = 0;
+					tmp['training']['headers'].push(variable_name);
+				}
+			}
+		})
+		tmp['training']['headers'].push("target");
+		tmp['training']['headers'].push("note");
+		tmp['coefficients']['intercept'] = 0;
+		tmp['performance'] = {}
+		console.log("Building model...")
+		console.log(tmp)
+		var question_arr = JSON.parse(localStorage.questions)
+		question_arr.unshift(tmp);
+		localStorage.questions = JSON.stringify(question_arr)
+		show_list();
+	}
+
 }
 
 function show_about(){
@@ -1444,15 +1451,6 @@ function load_page() {
 }
 
 window.onpaint = load_page();
-
-var changes = 0;
-$(window).bind('beforeunload', function(){
-  if (changes==1) {
-    return 'Are you sure you want to leave? Changes will not be saved.';
-  } else {
-	return undefined
-  }
-});
 
 function save_changes() {
 	console.log("Save Model")
