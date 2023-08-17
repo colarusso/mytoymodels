@@ -95,17 +95,17 @@
 <div id="build_new" class="build_new">
 	<h2>Build A Model From Scratch</h2>
 	<div id="input_question_type">
-		<p>lorum ipsum</p>
+		<p>Your model should ask a question. Specificly, a question where the answer is some number, or alternativly, "yes or no." First, let's decide what type of question you're trying to answer.</p>
 		<h3>What do you want to do?</h3>
 			<a href="javascript:void('')" onClick="new_model_type('continuous')" class="button">A Numeric Value</a>
 		<a href="javascript:void('')" onClick="new_model_type('categorical')" class="button">Yes or No (odds of Yes)</a>
 	</div>
 	<div id="input_question">
 		<p>
-			<p>lorum ipsum</p>
+			<p>Now lets go ahead and pose your question (e.g., "Will it rain tomorrow?" or "What will the high temperature be tomorrow?").</p>
 			<h3>Your Question</h3>
 			<input id="new_json_question">
-			<p>lorum ipsum</p>
+			<p>If you'd like, you can write a little note that will appear in the code to provide more context.</p>
 			<h3>Note (optional)</h3>
 			<input id="new_json_note">
 		</p>
@@ -128,16 +128,16 @@
 	</div>
 	<div id="input_features">
 		<p>
-			<p>lorum ipsum</p>
 			<h3>Feature Name</h3>
+			<p>Your model will use inputs/features to predict the answer to your question. That is, the are the observations upon which it will base its prediction. Choose a short one or few-word group to signafy this variable. It should make a good variable name ("Today's high temp.").</p>
 			<input id="new_json_feature_name">
-			<p>lorum ipsum</p>
 			<h3>More (optional)</h3>
+			<p>Provide more information to show up when collecting this data point.</p>
 			<input id="new_json_feature_more">
 		</p>
 		<p>
-			<p>lorum ipsum</p>
 			<h3>Type of Feature</h3>
+			<p>As with the answer to your question, your inputs/features can be of two types: continuous (numbers) or categorical (one option from a list of options). Unlike your answer, however, if you choose <i>categorical</i> you can make the list of options as long as you like.</p>
 			<select id="choose_type" oninput="new_model_feature_type(this.value)">
 				<option value="choose">Choose One</option>
 				<option value="continuous">Continuous</option>
@@ -145,22 +145,22 @@
 			</select>
 		</p>
 		<div id="feature_units">
-			<p>lorum ipsum</p>
 			<h3>Units</h3>
+			<p>The units of measure for your feature (degrees Fahrenheit)</p>
 			<input id="new_json_feature_units">
-			<p>lorum ipsum</p>
 			<h3>Lower Limit</h3>
+			<p>The lowest value you expect to collect.</p>
 			<input id="new_json_feature_lower" type="number">
-			<p>lorum ipsum</p>
 			<h3>Upper Limit</h3>
+			<p>The highest value you expect to collect.</p>
 			<input id="new_json_feature_upper" type="number">
-			<p>lorum ipsum</p>
 			<h3>Mean</h3>
+			<p>The average value for this measure.</p>
 			<input id="new_json_feature_mean" type="number">
 		</div>
 		<div id="feature_options">
-			<p>lorum ipsum</p>
 			<h3>Options</h3>
+			<p>Build a list of all possible options.</p>
 			<p id="feature_options_list">
 				<input id="new_json_feature_option_0">
 			</p>
