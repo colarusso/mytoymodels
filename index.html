@@ -1244,21 +1244,22 @@ function format_check(json){
 
 function mem_limit() {
 	console.log("Find Memory Limit")
-	if (localStorage && !localStorage.getItem('mem_limit')) {
-		var i = 0;
-		try {
+	//if (localStorage && !localStorage.getItem('mem_limit')) {
+	//	var i = 0;
+	//	try {
 			// Test up to 10 MB
-			for (i = 250; i <= 10000; i += 250) {
-				localStorage.setItem('mem_test', new Array((i * 1024) + 1).join('a'));
-			}
-		} catch (e) {
-			localStorage.removeItem('mem_test');
-			localStorage.setItem('mem_limit', i - 250);            
-		}
-		return true
-	} else {
-		return false
-	}
+	//		for (i = 250; i <= 10000; i += 250) {
+	//			localStorage.setItem('mem_test', new Array((i * 1024) + 1).join('a'));
+	//		}
+	//	} catch (e) {
+	//		localStorage.removeItem('mem_test');
+	//		localStorage.setItem('mem_limit', i - 250);            
+	//	}
+	//	return true
+	//} else {
+	//	return false
+	//}
+	localStorage.setItem('mem_limit', 5000);   
 }
 
 function mem_usage() {
