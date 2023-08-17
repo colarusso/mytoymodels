@@ -492,10 +492,6 @@
 
 <script type="text/javascript">
 
-if (!localStorage.questions) {
-	localStorage.questions = "[]";
-}
-
 function rethinkWindowSize() {
 	$('#features_wrapper').css('top',($('#prediction').height()+40)+'px');
 	$('#features_wrapper').scrollTop(0);
@@ -1417,6 +1413,11 @@ function toggle_wrap(value) {
 
 function load_page() {
 	console.log("Load Screen")
+
+	if (!localStorage.questions) {
+		localStorage.questions = "[]";
+	}
+
 	load_model();
 	
 	if (localStorage.screen=="list") {
