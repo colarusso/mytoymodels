@@ -1,5 +1,5 @@
 library = [ 
-   {
+  {
     "type": "continuous",
     "question": "What is X plus Y?",
     'description' : 'This sample PRETRAINED linear model is meant to help you see how things work here.',
@@ -139,33 +139,33 @@ library = [
         "y": 0.999999621830272
     },
     "performance": {}
-   },
-   {
+  },
+  {
     "type": "categorical",
     "target": {
-        "possible_answers": [
+      "possible_answers": [
         "Yes",
         "No"
-        ]
+      ]
     },
     "question": "Will I sleep well tonight?",
-    'description' : 'This sample logistic model is meant to help you see how things work here.',
+    "description": "This sample logistic model is meant to help you see how things work here.",
     "features": [
-        {
+      {
         "name": "Last Night's Sleep",
         "type": "categorical",
         "categories": [
-            "Poor",
-            "Good",
-            "Excellent"
+          "Poor",
+          "Good",
+          "Excellent"
         ],
         "weights": [
-            1,
-            2,
-            1
+          1,
+          2,
+          1
         ]
-        },
-        {
+      },
+      {
         "name": "Today's Exercise",
         "description": "Minutes exercising today (walking counts).",
         "type": "continuous",
@@ -173,8 +173,8 @@ library = [
         "lower": 0,
         "upper": 120,
         "mean": 15
-        },
-        {
+      },
+      {
         "name": "Last coffee",
         "description": "How long before bed did you have your last coffee? Enter 16 if you didn't have any coffee.",
         "type": "continuous",
@@ -182,8 +182,8 @@ library = [
         "lower": 0,
         "upper": 16,
         "mean": 10
-        },
-        {
+      },
+      {
         "name": "Screen Time",
         "description": "How long before bed did you avoid glowing screens?",
         "type": "continuous",
@@ -191,10 +191,19 @@ library = [
         "lower": 0,
         "upper": 120,
         "mean": 10
-        }
+      },
+      {
+        "name": "Bedroom Temp",
+        "description": "What was the temperature when you went to bed?",
+        "type": "continuous",
+        "units": "degrees Fahrenheit",
+        "lower": 60,
+        "upper": 110,
+        "mean": 68
+      }
     ],
     "training": {
-        "headers": [
+      "headers": [
         "recorded_on",
         "last_night_s_sleep-poor",
         "last_night_s_sleep-good",
@@ -202,23 +211,25 @@ library = [
         "today_s_exercise",
         "last_coffee",
         "screen_time",
+        "bedroom_temp",
         "target",
         "note"
-        ],
-        "observations": []
+      ],
+      "observations": []
     },
     "trained_on": 0,
     "coefficients": {
-        "intercept": 0,
-        "last_night_s_sleep-poor": 0,
-        "last_night_s_sleep-good": 0,
-        "last_night_s_sleep-excellent": 0,
-        "today_s_exercise": 0,
-        "last_coffee": 0,
-        "screen_time": 0,
+      "intercept": 0,
+      "last_night_s_sleep-poor": 0,
+      "last_night_s_sleep-good": 0,
+      "last_night_s_sleep-excellent": 0,
+      "today_s_exercise": 0,
+      "last_coffee": 0,
+      "screen_time": 0,
+      "bedroom_temp": 0
     },
     "performance": {}
-   }
+  }
 ]
 
 
